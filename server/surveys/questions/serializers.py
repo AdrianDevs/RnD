@@ -45,12 +45,3 @@ class SurveyQuestionAndAnswerChoiceSerializer(serializers.ModelSerializer):
         model = SurveyQuestionAndAnswerChoice
         fields = ['survey_id', 'question', 'answer_choices']
         
-
-class SurveyDetailedSerializer(serializers.ModelSerializer):
-    questions_and_answer_choices = SurveyQuestionAndAnswerChoiceSerializer(source='surveyquestionandanswerchoice_set', many=True)
-
-    class Meta:
-        model = Survey
-        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'brand', 'questions_and_answer_choices']
-
-
