@@ -48,6 +48,7 @@ coverage.xml
 *.sw*
 manage.py
 .DS_Store
+.env
 
 # example database
 drf_example
