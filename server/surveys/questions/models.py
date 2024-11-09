@@ -32,7 +32,7 @@ class Survey(models.Model):
     description = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField()
-    brand = models.ForeignKey(Brand, on_delete=models.RESTRICT)
+    brand_id = models.ForeignKey(Brand, on_delete=models.RESTRICT)
 
     def __str__(self):
         return self.name

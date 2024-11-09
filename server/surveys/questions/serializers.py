@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from surveys.models import AnswerChoice, Brand, Question, QuestionType, Survey, SurveyQuestionAndAnswerChoice
+from surveys.questions.models import AnswerChoice, Brand, Question, QuestionType, Survey, SurveyQuestionAndAnswerChoice
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -13,12 +13,17 @@ class QuestionTypeSerializer(serializers.ModelSerializer):
         model = QuestionType
         fields = ["name", "description"]
 
-class QuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializerReader(serializers.ModelSerializer):
     question_type = QuestionTypeSerializer(source="question_type_id")
 
     class Meta:
         model = Question
         fields = ["text", "question_type"]
+
+class QuestionSerializerWriter(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ["text", "question_type_id"]
 
 
 class AnswerChoiceSerializer(serializers.ModelSerializer):
@@ -27,7 +32,7 @@ class AnswerChoiceSerializer(serializers.ModelSerializer):
         fields = ['text']
 
 
-class SurveySerializer(serializers.ModelSerializer):
+class SurveySerializerReader(serializers.ModelSerializer):
     brand_name = serializers.SerializerMethodField() # type: ignore
 
     class Meta:
@@ -35,13 +40,23 @@ class SurveySerializer(serializers.ModelSerializer):
         fields =  ["id", "name", "description", "start_date", "end_date", "brand_name"]
 
     def get_brand_name(self, obj):
-        return obj.brand.name
+        return obj.brand_id.name
+    
+class SurveySerializerWriter(serializers.ModelSerializer):
+    class Meta:
+        model = Survey
+        fields =  ["id", "name", "description", "start_date", "end_date", "brand_id"]
 
-class SurveyQuestionAndAnswerChoiceSerializer(serializers.ModelSerializer):
-    question = QuestionSerializer(source='question_id')
+class SurveyQuestionAndAnswerChoiceSerializerReader(serializers.ModelSerializer):
+    question = QuestionSerializerReader(source='question_id')
     answer_choices = AnswerChoiceSerializer(source='answer_choice_ids', many=True)
 
     class Meta:
         model = SurveyQuestionAndAnswerChoice
         fields = ['survey_id', 'question', 'answer_choices']
+
+class SurveyQuestionAndAnswerChoiceSerializerWriter(serializers.ModelSerializer):
+    class Meta:
+        model = SurveyQuestionAndAnswerChoice
+        fields = ['survey_id', 'question_id', 'answer_choice_ids']
         

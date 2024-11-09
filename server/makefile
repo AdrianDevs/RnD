@@ -11,6 +11,7 @@ COMPOSE_DOWN := docker compose down
 PY_DEPENCIES := poetry install
 PY_MIGRATE_CREATE := python manage.py makemigrations
 PY_MIGRATE := python manage.py migrate
+PY_TEST := python manage.py test
 PY_RUN := python manage.py runserver
 
 # Default rule to build the binary
@@ -29,20 +30,14 @@ down:
 	@echo "Stopping containers complete!"
 
 # Run the application
-start: up
+run: up
 	@echo "Running $(APP_NAME)..."
 	$(PY_RUN)
-
-# Stop running containers and clean the build
-stop:
-	@echo "Stopping..."
-	# TODO stop the server
-	make down
 
 # Run tests
 test:
 	@echo "Running tests..."
-	# TODO: Add test command
+	$(PY_TEST)
 
 # Install dependencies
 deps:
@@ -66,11 +61,10 @@ migrate-apply:
 # Help command to display usage of the Makefile
 help:
 	@echo "Usage:"
-	@echo "  make          				- Start containers and start the server"
-	@echo "  make start    				- Start containers and start the server"
+	@echo "  make          				- Start containers and run the server"
+	@echo "  make run    				  - Start containers and run the server"
 	@echo "  make stop     				- Stop containers and stop the server"
 	@echo "  make up       				- Start running containers"
-	@echo "  make down     				- Stop running containers"
 	@echo "  make test     				- Run tests"
 	@echo "  make deps     				- Install dependencies"
 	@echo "  make version  				- Show application version"

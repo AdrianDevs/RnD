@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from surveys.models import AnswerChoice, Brand, Question, QuestionType, Survey, SurveyQuestionAndAnswerChoice, Location, Occupation, Participant, SurveyAnswer, SurveyResponse
+from surveys.participants.models import Location, Occupation, Participant
+from surveys.questions.models import AnswerChoice, Brand, Question, QuestionType, Survey, SurveyQuestionAndAnswerChoice
+from surveys.responses.models import SurveyAnswer, SurveyResponse
 
 admin.site.register(Brand)
 admin.site.register(QuestionType)

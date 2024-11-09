@@ -5,8 +5,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from surveys.models import Brand, Question, QuestionType, Survey
-from surveys.questions.serializers import BrandSerializer, QuestionSerializer, QuestionTypeSerializer, SurveyQuestionAndAnswerChoiceSerializer, SurveySerializer
+from surveys.questions.models import Brand, Question, QuestionType, Survey
+from surveys.questions.serializers import BrandSerializer, QuestionSerializerReader, QuestionTypeSerializer, SurveyQuestionAndAnswerChoiceSerializerReader, SurveySerializerReader
 
 class BrandList(APIView):
     def get(self, request: Request, format: Optional[str] = None):
@@ -30,17 +30,17 @@ class QuestionTypesList(APIView):
 class QuestionList(APIView):
     def get(self, request: Request, format: Optional[str] = None):
       questions = Question.objects.select_related("question_type_id").all()
-      serializer = QuestionSerializer(questions, many=True)
+      serializer = QuestionSerializerReader(questions, many=True)
       return Response(serializer.data)
     
 class SurveyViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    queryset = (Survey.objects.select_related("brand"))
-    serializer_class = SurveySerializer
+    queryset = (Survey.objects.select_related("brand_id"))
+    serializer_class = SurveySerializerReader
 
     def retrieve(self, request, pk):
       item = self.get_object()
       questions_queryset = item.surveyquestionandanswerchoice_set.select_related("question_id", "survey_id").prefetch_related("answer_choice_ids")
-      questions_serializer = SurveyQuestionAndAnswerChoiceSerializer(questions_queryset, many=True)
+      questions_serializer = SurveyQuestionAndAnswerChoiceSerializerReader(questions_queryset, many=True)
       questions_data = questions_serializer.data
       for question in questions_data:
         question.pop("survey_id")
