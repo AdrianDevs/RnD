@@ -14,6 +14,7 @@ The wrapped request then offers a richer API, in particular :
     - full support of PUT method, including support for file uploads
     - form overloading of HTTP method, content type and content
 """
+
 def is_form_media_type(media_type):
     """
     Return True if the media type is a valid form media type.
@@ -30,23 +31,16 @@ class override_method:
         with override_method(view, request, 'POST') as request:
             ... # Do stuff with `view` and `request`
     """
-    def __init__(self, view, request, method) -> None:
+    def __init__(self, view, request, method) -> None: ...
+    def __enter__(self):  # -> Request:
         ...
-    
-    def __enter__(self): # -> Request:
+    def __exit__(self, *args, **kwarg):  # -> None:
         ...
-    
-    def __exit__(self, *args, **kwarg): # -> None:
-        ...
-    
 
-
-class WrappedAttributeError(Exception):
-    ...
-
+class WrappedAttributeError(Exception): ...
 
 @contextmanager
-def wrap_attributeerrors(): # -> Generator[None, Any, None]:
+def wrap_attributeerrors():  # -> Generator[None, Any, None]:
     """
     Used to re-raise AttributeErrors caught during authentication, preventing
     these errors from otherwise being handled by the attribute access protocol.
@@ -58,10 +52,10 @@ class Empty:
     Placeholder for unset attributes.
     Cannot use `None`, as that may be a valid value.
     """
+
     ...
 
-
-def clone_request(request, method): # -> Request:
+def clone_request(request, method):  # -> Request:
     """
     Internal helper method to clone a request, replacing with a different
     HTTP method.  Used for checking permissions against other methods.
@@ -73,13 +67,9 @@ class ForcedAuthentication:
     This authentication class is used if the test client or request factory
     forcibly authenticated the request.
     """
-    def __init__(self, force_user, force_token) -> None:
+    def __init__(self, force_user, force_token) -> None: ...
+    def authenticate(self, request):  # -> tuple[Any, Any]:
         ...
-    
-    def authenticate(self, request): # -> tuple[Any, Any]:
-        ...
-    
-
 
 class Request:
     """
@@ -92,37 +82,31 @@ class Request:
         - authenticators(list/tuple). The authenticators used to try
           authenticating the request's user.
     """
-    def __init__(self, request, parsers=..., authenticators=..., negotiator=..., parser_context=...) -> None:
+    def __init__(self, request, parsers=..., authenticators=..., negotiator=..., parser_context=...) -> None: ...
+    def __repr__(self):  # -> str:
         ...
-    
-    def __repr__(self): # -> str:
+    def __class_getitem__(cls, *args, **kwargs):  # -> type[Self]:
         ...
-    
-    def __class_getitem__(cls, *args, **kwargs): # -> type[Self]:
-        ...
-    
     @property
-    def content_type(self): # -> Any:
+    def content_type(self):  # -> Any:
         ...
-    
     @property
-    def stream(self): # -> type[Empty] | HttpRequest | BytesIO | None:
+    def stream(self):  # -> type[Empty] | HttpRequest | BytesIO | None:
         """
         Returns an object that may be used to stream the request content.
         """
         ...
-    
+
     @property
-    def query_params(self): # -> QueryDict:
+    def query_params(self):  # -> QueryDict:
         """
         More semantically correct name for request.GET.
         """
         ...
-    
+
     @property
-    def data(self): # -> type[Empty] | QueryDict | dict[Any, Any] | Any:
+    def data(self):  # -> type[Empty] | QueryDict | dict[Any, Any] | Any:
         ...
-    
     @property
     def user(self):
         """
@@ -130,9 +114,9 @@ class Request:
         by the authentication classes provided to the request.
         """
         ...
-    
+
     @user.setter
-    def user(self, value): # -> None:
+    def user(self, value):  # -> None:
         """
         Sets the user on the current request. This is necessary to maintain
         compatibility with django.contrib.auth where the user property is
@@ -142,7 +126,7 @@ class Request:
         instance, ensuring that it is available to any middleware in the stack.
         """
         ...
-    
+
     @property
     def auth(self):
         """
@@ -150,48 +134,39 @@ class Request:
         request, such as an authentication token.
         """
         ...
-    
+
     @auth.setter
-    def auth(self, value): # -> None:
+    def auth(self, value):  # -> None:
         """
         Sets any non-user authentication information associated with the
         request, such as an authentication token.
         """
         ...
-    
+
     @property
-    def successful_authenticator(self): # -> ForcedAuthentication | None:
+    def successful_authenticator(self):  # -> ForcedAuthentication | None:
         """
         Return the instance of the authentication instance class that was used
         to authenticate the request, or `None`.
         """
         ...
-    
-    def __getattr__(self, attr): # -> Any:
+
+    def __getattr__(self, attr):  # -> Any:
         """
         If an attribute does not exist on this instance, then we also attempt
         to proxy it to the underlying HttpRequest object.
         """
         ...
-    
-    @property
-    def DATA(self):
-        ...
-    
-    @property
-    def POST(self): # -> type[Empty] | QueryDict | Any | dict[Any, Any]:
-        ...
-    
-    @property
-    def FILES(self): # -> type[Empty] | MultiValueDict[str, UploadedFile] | MultiValueDict[Any, Any] | Any:
-        ...
-    
-    @property
-    def QUERY_PARAMS(self):
-        ...
-    
-    def force_plaintext_errors(self, value): # -> None:
-        ...
-    
 
-
+    @property
+    def DATA(self): ...
+    @property
+    def POST(self):  # -> type[Empty] | QueryDict | Any | dict[Any, Any]:
+        ...
+    @property
+    def FILES(self):  # -> type[Empty] | MultiValueDict[str, UploadedFile] | MultiValueDict[Any, Any] | Any:
+        ...
+    @property
+    def QUERY_PARAMS(self): ...
+    def force_plaintext_errors(self, value):  # -> None:
+        ...

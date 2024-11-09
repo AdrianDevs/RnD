@@ -10,6 +10,7 @@ it is initialized with unrendered data, instead of a pre-rendered string.
 
 The appropriate renderer is called during Django's template response rendering.
 """
+
 class Response(SimpleTemplateResponse):
     """
     An HttpResponse that allows its data to be rendered into
@@ -24,27 +25,22 @@ class Response(SimpleTemplateResponse):
         For example being set automatically by the `APIView`.
         """
         ...
-    
-    def __class_getitem__(cls, *args, **kwargs): # -> type[Self]:
+
+    def __class_getitem__(cls, *args, **kwargs):  # -> type[Self]:
         ...
-    
     @property
-    def rendered_content(self): # -> bytes | Any:
+    def rendered_content(self):  # -> bytes | Any:
         ...
-    
     @property
-    def status_text(self): # -> str:
+    def status_text(self):  # -> str:
         """
         Returns reason text corresponding to our HTTP response status code.
         Provided for convenience.
         """
         ...
-    
-    def __getstate__(self): # -> object:
+
+    def __getstate__(self):  # -> object:
         """
         Remove attributes from the response that shouldn't be cached.
         """
         ...
-    
-
-

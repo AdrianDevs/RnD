@@ -7,15 +7,14 @@ import json
 """
 Helper classes for parsers.
 """
+
 class JSONEncoder(json.JSONEncoder):
     """
     JSONEncoder subclass that knows how to encode date/time/timedelta,
     decimal types, generators and other basic python objects.
     """
-    def default(self, obj): # -> str | float | tuple[Any, ...] | dict[Any, Any] | list[Any] | Any:
+    def default(self, obj):  # -> str | float | tuple[Any, ...] | dict[Any, Any] | list[Any] | Any:
         ...
-    
-
 
 class CustomScalar:
     """
@@ -23,8 +22,4 @@ class CustomScalar:
     can understand.
     """
     @classmethod
-    def represent_timedelta(cls, dumper, data):
-        ...
-    
-
-
+    def represent_timedelta(cls, dumper, data): ...

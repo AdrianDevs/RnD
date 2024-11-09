@@ -7,7 +7,8 @@ Handling of media types, as found in HTTP Content-Type and Accept headers.
 
 See https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7
 """
-def media_type_matches(lhs, rhs): # -> bool:
+
+def media_type_matches(lhs, rhs):  # -> bool:
     """
     Returns ``True`` if the media type in the first argument <= the
     media type in the second argument.  The media types are strings
@@ -22,7 +23,7 @@ def media_type_matches(lhs, rhs): # -> bool:
     """
     ...
 
-def order_by_precedence(media_type_lst): # -> list[set[Any]]:
+def order_by_precedence(media_type_lst):  # -> list[set[Any]]:
     """
     Returns a list of sets of media type strings, ordered by precedence.
     Precedence is determined by how specific a media type is:
@@ -35,22 +36,16 @@ def order_by_precedence(media_type_lst): # -> list[set[Any]]:
     ...
 
 class _MediaType:
-    def __init__(self, media_type_str) -> None:
-        ...
-    
-    def match(self, other): # -> bool:
+    def __init__(self, media_type_str) -> None: ...
+    def match(self, other):  # -> bool:
         """Return true if this MediaType satisfies the given MediaType."""
         ...
-    
+
     @property
-    def precedence(self): # -> Literal[0, 1, 2, 3]:
+    def precedence(self):  # -> Literal[0, 1, 2, 3]:
         """
         Return a precedence level from 0-3 for the media type given how specific it is.
         """
         ...
-    
-    def __str__(self) -> str:
-        ...
-    
 
-
+    def __str__(self) -> str: ...

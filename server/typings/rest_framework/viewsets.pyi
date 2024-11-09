@@ -23,6 +23,7 @@ automatically.
     router.register(r'users', UserViewSet, 'user')
     urlpatterns = router.urls
 """
+
 class ViewSetMixin:
     """
     This is the magic.
@@ -36,49 +37,47 @@ class ViewSetMixin:
     view = MyViewSet.as_view({'get': 'list', 'post': 'create'})
     """
     @classonlymethod
-    def as_view(cls, actions=..., **initkwargs): # -> Callable[..., Any]:
+    def as_view(cls, actions=..., **initkwargs):  # -> Callable[..., Any]:
         """
         Because of the way class based views create a closure around the
         instantiated view, we need to totally reimplement `.as_view`,
         and slightly modify the view function that is created and returned.
         """
         ...
-    
+
     def initialize_request(self, request, *args, **kwargs):
         """
         Set the `.action` attribute on the view, depending on the request method.
         """
         ...
-    
-    def reverse_action(self, url_name, *args, **kwargs): # -> Any | str:
+
+    def reverse_action(self, url_name, *args, **kwargs):  # -> Any | str:
         """
         Reverse the action for the given `url_name`.
         """
         ...
-    
+
     @classmethod
-    def get_extra_actions(cls): # -> list[Any]:
+    def get_extra_actions(cls):  # -> list[Any]:
         """
         Get the methods that are marked as an extra ViewSet `@action`.
         """
         ...
-    
-    def get_extra_action_url_map(self): # -> dict[Any, Any]:
+
+    def get_extra_action_url_map(self):  # -> dict[Any, Any]:
         """
         Build a map of {names: urls} for the extra actions.
 
         This method will noop if `detail` was not provided as a view initkwarg.
         """
         ...
-    
-
 
 class ViewSet(ViewSetMixin, views.APIView):
     """
     The base ViewSet class does not provide any actions by default.
     """
-    ...
 
+    ...
 
 class GenericViewSet(ViewSetMixin, generics.GenericAPIView):
     """
@@ -86,21 +85,27 @@ class GenericViewSet(ViewSetMixin, generics.GenericAPIView):
     but does include the base set of generic view behavior, such as
     the `get_object` and `get_queryset` methods.
     """
-    ...
 
+    ...
 
 class ReadOnlyModelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
     """
     A viewset that provides default `list()` and `retrieve()` actions.
     """
+
     ...
 
-
-class ModelViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin, GenericViewSet):
+class ModelViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     """
     A viewset that provides default `create()`, `retrieve()`, `update()`,
     `partial_update()`, `destroy()` and `list()` actions.
     """
+
     ...
-
-

@@ -6,7 +6,12 @@ from django.db import models
 from django.utils.functional import cached_property
 from rest_framework.compat import postgres_fields
 from rest_framework.fields import ChoiceField, Field
-from rest_framework.relations import HyperlinkedIdentityField, HyperlinkedRelatedField, PrimaryKeyRelatedField, SlugRelatedField
+from rest_framework.relations import (
+    HyperlinkedIdentityField,
+    HyperlinkedRelatedField,
+    PrimaryKeyRelatedField,
+    SlugRelatedField,
+)
 
 """
 Serializers and ModelSerializers are similar to Forms and ModelForms.
@@ -23,6 +28,7 @@ response content is handled by parsers and renderers.
 LIST_SERIALIZER_KWARGS = ...
 LIST_SERIALIZER_KWARGS_REMOVE = ...
 ALL_FIELDS = ...
+
 class BaseSerializer(Field):
     """
     The BaseSerializer class provides a minimal class which may be used
@@ -47,17 +53,13 @@ class BaseSerializer(Field):
     .errors - Not available.
     .data - Available.
     """
-    def __init__(self, instance=..., data=..., **kwargs) -> None:
+    def __init__(self, instance=..., data=..., **kwargs) -> None: ...
+    def __new__(cls, *args, **kwargs):  # -> ListSerializer | Any | Self:
         ...
-    
-    def __new__(cls, *args, **kwargs): # -> ListSerializer | Any | Self:
+    def __class_getitem__(cls, *args, **kwargs):  # -> type[Self]:
         ...
-    
-    def __class_getitem__(cls, *args, **kwargs): # -> type[Self]:
-        ...
-    
     @classmethod
-    def many_init(cls, *args, **kwargs): # -> ListSerializer | Any:
+    def many_init(cls, *args, **kwargs):  # -> ListSerializer | Any:
         """
         This method implements the creation of a `ListSerializer` parent
         class when `many=True` is used. You can customize it if you need to
@@ -74,38 +76,23 @@ class BaseSerializer(Field):
             return CustomListSerializer(*args, **kwargs)
         """
         ...
-    
-    def to_internal_value(self, data):
-        ...
-    
-    def to_representation(self, instance):
-        ...
-    
-    def update(self, instance, validated_data):
-        ...
-    
-    def create(self, validated_data):
-        ...
-    
-    def save(self, **kwargs):
-        ...
-    
-    def is_valid(self, *, raise_exception=...): # -> bool:
-        ...
-    
-    @property
-    def data(self): # -> empty | None:
-        ...
-    
-    @property
-    def errors(self): # -> ReturnList | list[Any] | ReturnDict | dict[Any, Any] | ErrorDetail:
-        ...
-    
-    @property
-    def validated_data(self): # -> empty | dict[Any, Any] | None:
-        ...
-    
 
+    def to_internal_value(self, data): ...
+    def to_representation(self, instance): ...
+    def update(self, instance, validated_data): ...
+    def create(self, validated_data): ...
+    def save(self, **kwargs): ...
+    def is_valid(self, *, raise_exception=...):  # -> bool:
+        ...
+    @property
+    def data(self):  # -> empty | None:
+        ...
+    @property
+    def errors(self):  # -> ReturnList | list[Any] | ReturnDict | dict[Any, Any] | ErrorDetail:
+        ...
+    @property
+    def validated_data(self):  # -> empty | dict[Any, Any] | None:
+        ...
 
 class SerializerMetaclass(type):
     """
@@ -115,17 +102,17 @@ class SerializerMetaclass(type):
     or on any of its superclasses will be include in the
     `_declared_fields` dictionary.
     """
-    def __new__(cls, name, bases, attrs): # -> Self:
+    def __new__(cls, name, bases, attrs):  # -> Self:
         ...
-    
 
-
-def as_serializer_error(exc): # -> dict[Any, list[ErrorDetail] | list[Any] | Mapping[Any, Any]] | dict[Any | list[Any] | None, list[ErrorDetail] | ReturnList | list[Any]] | dict[Any | list[Any] | None, list[ErrorDetail]]:
+def as_serializer_error(
+    exc,
+):  # -> dict[Any, list[ErrorDetail] | list[Any] | Mapping[Any, Any]] | dict[Any | list[Any] | None, list[ErrorDetail] | ReturnList | list[Any]] | dict[Any | list[Any] | None, list[ErrorDetail]]:
     ...
 
 class Serializer(BaseSerializer, metaclass=SerializerMetaclass):
     default_error_messages = ...
-    def set_value(self, dictionary, keys, value): # -> None:
+    def set_value(self, dictionary, keys, value):  # -> None:
         """
         Similar to Python's built in `dictionary[key] = value`,
         but takes a list of nested keys instead of a single key.
@@ -135,104 +122,91 @@ class Serializer(BaseSerializer, metaclass=SerializerMetaclass):
         set_value({'a': 1}, ['x', 'y'], 2) -> {'a': 1, 'x': {'y': 2}}
         """
         ...
-    
+
     @cached_property
-    def fields(self): # -> BindingDict:
+    def fields(self):  # -> BindingDict:
         """
         A dictionary of {field_name: field_instance}.
         """
         ...
-    
+
     def get_fields(self):
         """
         Returns a dictionary of {field_name: field_instance}.
         """
         ...
-    
-    def get_validators(self): # -> list[Any]:
+
+    def get_validators(self):  # -> list[Any]:
         """
         Returns a list of validator callables.
         """
         ...
-    
-    def get_initial(self): # -> dict[Any, Any]:
+
+    def get_initial(self):  # -> dict[Any, Any]:
         ...
-    
-    def get_value(self, dictionary): # -> MultiValueDict[Any, Any] | type[empty]:
+    def get_value(self, dictionary):  # -> MultiValueDict[Any, Any] | type[empty]:
         ...
-    
-    def run_validation(self, data=...): # -> empty | dict[Any, Any] | None:
+    def run_validation(self, data=...):  # -> empty | dict[Any, Any] | None:
         """
         We override the default `run_validation`, because the validation
         performed by validators and the `.validate()` method should
         be coerced into an error dictionary with a 'non_fields_error' key.
         """
         ...
-    
-    def run_validators(self, value): # -> None:
+
+    def run_validators(self, value):  # -> None:
         """
         Add read_only fields with defaults to value before running validators.
         """
         ...
-    
-    def to_internal_value(self, data): # -> dict[Any, Any]:
+
+    def to_internal_value(self, data):  # -> dict[Any, Any]:
         """
         Dict of native values <- Dict of primitive datatypes.
         """
         ...
-    
-    def to_representation(self, instance): # -> dict[Any, Any]:
+
+    def to_representation(self, instance):  # -> dict[Any, Any]:
         """
         Object instance -> Dict of primitive datatypes.
         """
         ...
-    
-    def validate(self, attrs):
-        ...
-    
-    def __repr__(self): # -> str:
-        ...
-    
-    def __iter__(self): # -> Generator[NestedBoundField | JSONBoundField | BoundField, Any, None]:
-        ...
-    
-    def __getitem__(self, key): # -> NestedBoundField | JSONBoundField | BoundField:
-        ...
-    
-    @property
-    def data(self): # -> ReturnDict:
-        ...
-    
-    @property
-    def errors(self): # -> ReturnDict:
-        ...
-    
 
+    def validate(self, attrs): ...
+    def __repr__(self):  # -> str:
+        ...
+    def __iter__(self):  # -> Generator[NestedBoundField | JSONBoundField | BoundField, Any, None]:
+        ...
+    def __getitem__(self, key):  # -> NestedBoundField | JSONBoundField | BoundField:
+        ...
+    @property
+    def data(self):  # -> ReturnDict:
+        ...
+    @property
+    def errors(self):  # -> ReturnDict:
+        ...
 
 class ListSerializer(BaseSerializer):
     child = ...
     many = ...
     default_error_messages = ...
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs) -> None: ...
+    def get_initial(self):  # -> list[Any]:
         ...
-    
-    def get_initial(self): # -> list[Any]:
-        ...
-    
-    def get_value(self, dictionary): # -> list[Any] | type[empty]:
+    def get_value(self, dictionary):  # -> list[Any] | type[empty]:
         """
         Given the input dictionary, return the field value.
         """
         ...
-    
-    def run_validation(self, data=...): # -> empty | list[Any] | None:
+
+    def run_validation(self, data=...):  # -> empty | list[Any] | None:
         """
         We override the default `run_validation`, because the validation
         performed by validators and the `.validate()` method should
         be coerced into an error dictionary with a 'non_fields_error' key.
         """
         ...
-    
+
     def run_child_validation(self, data):
         """
         Run validation on child serializer.
@@ -243,51 +217,41 @@ class ListSerializer(BaseSerializer):
         return super().run_child_validation(data)
         """
         ...
-    
-    def to_internal_value(self, data): # -> list[Any]:
+
+    def to_internal_value(self, data):  # -> list[Any]:
         """
         List of dicts of native values <- List of dicts of primitive datatypes.
         """
         ...
-    
-    def to_representation(self, data): # -> list[Any]:
+
+    def to_representation(self, data):  # -> list[Any]:
         """
         List of object instances -> List of dicts of primitive datatypes.
         """
         ...
-    
-    def validate(self, attrs):
+
+    def validate(self, attrs): ...
+    def update(self, instance, validated_data): ...
+    def create(self, validated_data):  # -> list[Any]:
         ...
-    
-    def update(self, instance, validated_data):
-        ...
-    
-    def create(self, validated_data): # -> list[Any]:
-        ...
-    
-    def save(self, **kwargs): # -> list[Any]:
+    def save(self, **kwargs):  # -> list[Any]:
         """
         Save and return a list of object instances.
         """
         ...
-    
-    def is_valid(self, *, raise_exception=...): # -> bool:
-        ...
-    
-    def __repr__(self): # -> str:
-        ...
-    
-    @property
-    def data(self): # -> ReturnList:
-        ...
-    
-    @property
-    def errors(self): # -> ReturnDict | ReturnList:
-        ...
-    
 
+    def is_valid(self, *, raise_exception=...):  # -> bool:
+        ...
+    def __repr__(self):  # -> str:
+        ...
+    @property
+    def data(self):  # -> ReturnList:
+        ...
+    @property
+    def errors(self):  # -> ReturnDict | ReturnList:
+        ...
 
-def raise_errors_on_nested_writes(method_name, serializer, validated_data): # -> None:
+def raise_errors_on_nested_writes(method_name, serializer, validated_data):  # -> None:
     """
     Give explicit errors when users attempt to pass writable nested data.
 
@@ -323,11 +287,10 @@ class ModelSerializer(Serializer):
     you need you should either declare the extra/differing fields explicitly on
     the serializer class, or simply use a `Serializer` class.
     """
+
     serializer_field_mapping = ...
-    if hasattr(models, 'JSONField'):
-        ...
-    if postgres_fields:
-        ...
+    if hasattr(models, 'JSONField'): ...
+    if postgres_fields: ...
     serializer_related_field = PrimaryKeyRelatedField
     serializer_related_to_field = SlugRelatedField
     serializer_url_field = HyperlinkedIdentityField
@@ -355,18 +318,16 @@ class ModelSerializer(Serializer):
         to write an explicit `.create()` method.
         """
         ...
-    
-    def update(self, instance, validated_data):
-        ...
-    
-    def get_fields(self): # -> dict[Any, Any]:
+
+    def update(self, instance, validated_data): ...
+    def get_fields(self):  # -> dict[Any, Any]:
         """
         Return the dict of field names -> field instances that should be
         used for `self.fields` when instantiating the serializer.
         """
         ...
-    
-    def get_field_names(self, declared_fields, info): # -> Any | list[Any] | tuple[Any, ...]:
+
+    def get_field_names(self, declared_fields, info):  # -> Any | list[Any] | tuple[Any, ...]:
         """
         Returns the list of all field names that should be created when
         instantiating this serializer class. This is based on the default
@@ -374,84 +335,87 @@ class ModelSerializer(Serializer):
         `Meta.exclude` options if they have been specified.
         """
         ...
-    
-    def get_default_field_names(self, declared_fields, model_info): # -> list[Any]:
+
+    def get_default_field_names(self, declared_fields, model_info):  # -> list[Any]:
         """
         Return the default list of field names that will be used if the
         `Meta.fields` option is not specified.
         """
         ...
-    
-    def build_field(self, field_name, info, model_class, nested_depth): # -> tuple[type[PrimaryKeyRelatedField] | Any | type[ModelField] | type[CharField] | type[ChoiceField], Any] | tuple[type[SlugRelatedField] | type[PrimaryKeyRelatedField] | type[<subclass of SlugRelatedField and HyperlinkedRelatedField>] | type[<subclass of PrimaryKeyRelatedField and HyperlinkedRelatedField>], dict[str, Any]] | tuple[type[NestedSerializer], dict[str, bool]] | tuple[type[ReadOnlyField], dict[Any, Any]] | tuple[serializer_url_field, dict[str, str]]:
+
+    def build_field(
+        self, field_name, info, model_class, nested_depth
+    ):  # -> tuple[type[PrimaryKeyRelatedField] | Any | type[ModelField] | type[CharField] | type[ChoiceField], Any] | tuple[type[SlugRelatedField] | type[PrimaryKeyRelatedField] | type[<subclass of SlugRelatedField and HyperlinkedRelatedField>] | type[<subclass of PrimaryKeyRelatedField and HyperlinkedRelatedField>], dict[str, Any]] | tuple[type[NestedSerializer], dict[str, bool]] | tuple[type[ReadOnlyField], dict[Any, Any]] | tuple[serializer_url_field, dict[str, str]]:
         """
         Return a two tuple of (cls, kwargs) to build a serializer field with.
         """
         ...
-    
-    def build_standard_field(self, field_name, model_field): # -> tuple[type[PrimaryKeyRelatedField] | Any | type[ModelField] | type[CharField] | type[ChoiceField], Any]:
+
+    def build_standard_field(
+        self, field_name, model_field
+    ):  # -> tuple[type[PrimaryKeyRelatedField] | Any | type[ModelField] | type[CharField] | type[ChoiceField], Any]:
         """
         Create regular model fields.
         """
         ...
-    
-    def build_relational_field(self, field_name, relation_info): # -> tuple[type[SlugRelatedField] | type[PrimaryKeyRelatedField] | type[<subclass of SlugRelatedField and HyperlinkedRelatedField>] | type[<subclass of PrimaryKeyRelatedField and HyperlinkedRelatedField>], dict[str, Any]]:
+
+    def build_relational_field(
+        self, field_name, relation_info
+    ):  # -> tuple[type[SlugRelatedField] | type[PrimaryKeyRelatedField] | type[<subclass of SlugRelatedField and HyperlinkedRelatedField>] | type[<subclass of PrimaryKeyRelatedField and HyperlinkedRelatedField>], dict[str, Any]]:
         """
         Create fields for forward and reverse relationships.
         """
         ...
-    
-    def build_nested_field(self, field_name, relation_info, nested_depth): # -> tuple[type[NestedSerializer], dict[str, bool]]:
+
+    def build_nested_field(
+        self, field_name, relation_info, nested_depth
+    ):  # -> tuple[type[NestedSerializer], dict[str, bool]]:
         """
         Create nested fields for forward and reverse relationships.
         """
         class NestedSerializer(ModelSerializer):
-            class Meta:
-                ...
-            
-            
-        
-        
-    
-    def build_property_field(self, field_name, model_class): # -> tuple[type[ReadOnlyField], dict[Any, Any]]:
+            class Meta: ...
+
+    def build_property_field(self, field_name, model_class):  # -> tuple[type[ReadOnlyField], dict[Any, Any]]:
         """
         Create a read only field for model methods and properties.
         """
         ...
-    
-    def build_url_field(self, field_name, model_class): # -> tuple[serializer_url_field, dict[str, str]]:
+
+    def build_url_field(self, field_name, model_class):  # -> tuple[serializer_url_field, dict[str, str]]:
         """
         Create a field representing the object's own URL.
         """
         ...
-    
+
     def build_unknown_field(self, field_name, model_class):
         """
         Raise an error on any unknown fields.
         """
         ...
-    
+
     def include_extra_kwargs(self, kwargs, extra_kwargs):
         """
         Include any 'extra_kwargs' that have been included for this field,
         possibly removing any incompatible existing keyword arguments.
         """
         ...
-    
-    def get_extra_kwargs(self): # -> Any | dict[Any, Any]:
+
+    def get_extra_kwargs(self):  # -> Any | dict[Any, Any]:
         """
         Return a dictionary mapping field names to a dictionary of
         additional keyword arguments.
         """
         ...
-    
-    def get_unique_together_constraints(self, model): # -> Generator[tuple[Any, Any] | tuple[Never, Any], Any, None]:
+
+    def get_unique_together_constraints(self, model):  # -> Generator[tuple[Any, Any] | tuple[Never, Any], Any, None]:
         """
         Returns iterator of (fields, queryset), each entry describes an unique together
         constraint on `fields` in `queryset`.
         """
         ...
-    
-    def get_uniqueness_extra_kwargs(self, field_names, declared_fields, extra_kwargs): # -> tuple[Any, dict[Any, Any]]:
+
+    def get_uniqueness_extra_kwargs(self, field_names, declared_fields, extra_kwargs):  # -> tuple[Any, dict[Any, Any]]:
         """
         Return any additional field options that need to be included as a
         result of uniqueness constraints on the model. This is returned as
@@ -460,20 +424,20 @@ class ModelSerializer(Serializer):
         ('dict of updated extra kwargs', 'mapping of hidden fields')
         """
         ...
-    
-    def get_validators(self): # -> list[Any]:
+
+    def get_validators(self):  # -> list[Any]:
         """
         Determine the set of validators to use when instantiating serializer.
         """
         ...
-    
-    def get_unique_together_validators(self): # -> list[Any]:
+
+    def get_unique_together_validators(self):  # -> list[Any]:
         """
         Determine a default set of validators for any unique_together constraints.
         """
         ...
-    
-    def get_unique_for_date_validators(self): # -> list[Any]:
+
+    def get_unique_for_date_validators(self):  # -> list[Any]:
         """
         Determine a default set of validators for the following constraints:
 
@@ -482,8 +446,6 @@ class ModelSerializer(Serializer):
         * unique_for_year
         """
         ...
-    
-
 
 class HyperlinkedModelSerializer(ModelSerializer):
     """
@@ -493,25 +455,20 @@ class HyperlinkedModelSerializer(ModelSerializer):
     * A 'url' field is included instead of the 'id' field.
     * Relationships to other instances are hyperlinks, instead of primary keys.
     """
+
     serializer_related_field = HyperlinkedRelatedField
-    def get_default_field_names(self, declared_fields, model_info): # -> list[Any | list[Any] | None]:
+    def get_default_field_names(self, declared_fields, model_info):  # -> list[Any | list[Any] | None]:
         """
         Return the default list of field names that will be used if the
         `Meta.fields` option is not specified.
         """
         ...
-    
-    def build_nested_field(self, field_name, relation_info, nested_depth): # -> tuple[type[NestedSerializer], dict[str, bool]]:
+
+    def build_nested_field(
+        self, field_name, relation_info, nested_depth
+    ):  # -> tuple[type[NestedSerializer], dict[str, bool]]:
         """
         Create nested fields for forward and reverse relationships.
         """
         class NestedSerializer(HyperlinkedModelSerializer):
-            class Meta:
-                ...
-            
-            
-        
-        
-    
-
-
+            class Meta: ...

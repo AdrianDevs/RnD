@@ -8,4 +8,3 @@ def get_breadcrumbs(url, request=...):
     tuple of (name, url).
     """
     ...
-

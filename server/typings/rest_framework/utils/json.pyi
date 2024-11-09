@@ -12,22 +12,17 @@ REST framework should always import this wrapper module in order to maintain
 spec-compliant encoding/decoding. Support for non-standard features should be
 handled by users at the renderer and parser layer.
 """
-def strict_constant(o):
-    ...
 
+def strict_constant(o): ...
 @functools.wraps(json.dump)
-def dump(*args, **kwargs): # -> None:
+def dump(*args, **kwargs):  # -> None:
     ...
-
 @functools.wraps(json.dumps)
-def dumps(*args, **kwargs): # -> str:
+def dumps(*args, **kwargs):  # -> str:
     ...
-
 @functools.wraps(json.load)
-def load(*args, **kwargs): # -> Any:
+def load(*args, **kwargs):  # -> Any:
     ...
-
 @functools.wraps(json.loads)
-def loads(*args, **kwargs): # -> Any:
+def loads(*args, **kwargs):  # -> Any:
     ...
-

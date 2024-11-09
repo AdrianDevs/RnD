@@ -7,17 +7,17 @@ inspectors.py   # Per-endpoint view introspection
 
 See schemas.__init__.py for package overview.
 """
+
 class ViewInspector:
     """
     Descriptor class on APIView.
 
     Provide subclass for per-view schema generation
     """
+
     header_regex = ...
-    def __init__(self) -> None:
-        ...
-    
-    def __get__(self, instance, owner): # -> Self:
+    def __init__(self) -> None: ...
+    def __get__(self, instance, owner):  # -> Self:
         """
         Enables `ViewInspector` as a Python _Descriptor_.
 
@@ -34,24 +34,21 @@ class ViewInspector:
         descriptor usage.
         """
         ...
-    
-    def __set__(self, instance, other): # -> None:
+
+    def __set__(self, instance, other):  # -> None:
         ...
-    
     @property
     def view(self):
         """View property."""
         ...
-    
+
     @view.setter
-    def view(self, value): # -> None:
+    def view(self, value):  # -> None:
         ...
-    
     @view.deleter
-    def view(self): # -> None:
+    def view(self):  # -> None:
         ...
-    
-    def get_description(self, path, method): # -> str:
+    def get_description(self, path, method):  # -> str:
         """
         Determine a path description.
 
@@ -59,13 +56,8 @@ class ViewInspector:
         or else the class docstring.
         """
         ...
-    
-
 
 class DefaultSchema(ViewInspector):
     """Allows overriding AutoSchema using DEFAULT_SCHEMA_CLASS setting"""
-    def __get__(self, instance, owner): # -> ViewInspector:
+    def __get__(self, instance, owner):  # -> ViewInspector:
         ...
-    
-
-

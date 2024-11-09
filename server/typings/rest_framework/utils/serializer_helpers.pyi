@@ -11,26 +11,19 @@ class ReturnDict(dict):
     Includes a backlink to the serializer instance for renderers
     to use if they need richer field information.
     """
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs) -> None: ...
+    def copy(self):  # -> ReturnDict:
         ...
-    
-    def copy(self): # -> ReturnDict:
+    def __repr__(self):  # -> str:
         ...
-    
-    def __repr__(self): # -> str:
+    def __reduce__(self):  # -> tuple[type[dict[Any, Any]], tuple[dict[Any, Any]]]:
         ...
-    
-    def __reduce__(self): # -> tuple[type[dict[Any, Any]], tuple[dict[Any, Any]]]:
-        ...
-    
-    if sys.version_info >= (3, 9):
-        def __or__(self, other): # -> _NotImplementedType | Self:
-            ...
-        
-        def __ror__(self, other): # -> _NotImplementedType | Self:
-            ...
-        
 
+    if sys.version_info >= (3, 9):
+        def __or__(self, other):  # -> _NotImplementedType | Self:
+            ...
+        def __ror__(self, other):  # -> _NotImplementedType | Self:
+            ...
 
 class ReturnList(list):
     """
@@ -38,16 +31,11 @@ class ReturnList(list):
     Includes a backlink to the serializer instance for renderers
     to use if they need richer field information.
     """
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs) -> None: ...
+    def __repr__(self):  # -> str:
         ...
-    
-    def __repr__(self): # -> str:
+    def __reduce__(self):  # -> tuple[type[list[Any]], tuple[list[Any]]]:
         ...
-    
-    def __reduce__(self): # -> tuple[type[list[Any]], tuple[list[Any]]]:
-        ...
-    
-
 
 class BoundField:
     """
@@ -55,25 +43,17 @@ class BoundField:
     Returned when iterating over a serializer instance,
     providing an API similar to Django forms and form fields.
     """
-    def __init__(self, field, value, errors, prefix=...) -> None:
+    def __init__(self, field, value, errors, prefix=...) -> None: ...
+    def __getattr__(self, attr_name):  # -> Any:
         ...
-    
-    def __getattr__(self, attr_name): # -> Any:
+    def __repr__(self):  # -> str:
         ...
-    
-    def __repr__(self): # -> str:
+    def as_form_field(self):  # -> Self:
         ...
-    
-    def as_form_field(self): # -> Self:
-        ...
-    
-
 
 class JSONBoundField(BoundField):
-    def as_form_field(self): # -> Self:
+    def as_form_field(self):  # -> Self:
         ...
-    
-
 
 class NestedBoundField(BoundField):
     """
@@ -81,19 +61,13 @@ class NestedBoundField(BoundField):
     in order to support nested bound fields. This class is the type of
     `BoundField` that is used for serializer fields.
     """
-    def __init__(self, field, value, errors, prefix=...) -> None:
+    def __init__(self, field, value, errors, prefix=...) -> None: ...
+    def __iter__(self):  # -> Generator[NestedBoundField | JSONBoundField | BoundField, Any, None]:
         ...
-    
-    def __iter__(self): # -> Generator[NestedBoundField | JSONBoundField | BoundField, Any, None]:
+    def __getitem__(self, key):  # -> NestedBoundField | JSONBoundField | BoundField:
         ...
-    
-    def __getitem__(self, key): # -> NestedBoundField | JSONBoundField | BoundField:
+    def as_form_field(self):  # -> Self:
         ...
-    
-    def as_form_field(self): # -> Self:
-        ...
-    
-
 
 class BindingDict(MutableMapping):
     """
@@ -103,26 +77,15 @@ class BindingDict(MutableMapping):
     `field.bind()` so that the `field_name` and `parent` attributes
     can be set correctly.
     """
-    def __init__(self, serializer) -> None:
+    def __init__(self, serializer) -> None: ...
+    def __setitem__(self, key, field):  # -> None:
         ...
-    
-    def __setitem__(self, key, field): # -> None:
+    def __getitem__(self, key): ...
+    def __delitem__(self, key):  # -> None:
         ...
-    
-    def __getitem__(self, key):
+    def __iter__(self):  # -> Iterator[Any]:
         ...
-    
-    def __delitem__(self, key): # -> None:
+    def __len__(self):  # -> int:
         ...
-    
-    def __iter__(self): # -> Iterator[Any]:
+    def __repr__(self):  # -> str:
         ...
-    
-    def __len__(self): # -> int:
-        ...
-    
-    def __repr__(self): # -> str:
-        ...
-    
-
-

@@ -11,7 +11,8 @@ Usage: `get_field_info(model)` returns a `FieldInfo` instance.
 """
 FieldInfo = ...
 RelationInfo = ...
-def get_field_info(model): # -> FieldInfo:
+
+def get_field_info(model):  # -> FieldInfo:
     """
     Given a model class, returns a `FieldInfo` instance, which is a
     `namedtuple`, containing metadata about the various field types on the model
@@ -19,9 +20,8 @@ def get_field_info(model): # -> FieldInfo:
     """
     ...
 
-def is_abstract_model(model): # -> Literal[False]:
+def is_abstract_model(model):  # -> Literal[False]:
     """
     Given a model class, returns a boolean True if it is abstract and False if it is not.
     """
     ...
-

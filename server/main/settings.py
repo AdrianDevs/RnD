@@ -62,7 +62,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'main.urls'
 
-TEMPLATES = [ # type: ignore
+TEMPLATES = [  # type: ignore
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -84,12 +84,12 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = { # type: ignore
-    "default": {
+DATABASES = {  # type: ignore
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("PG_DATABASE"),
-        'USER': os.getenv("PG_USERNAME"),
-        'PASSWORD': os.getenv("PG_PASSWORD"),
+        'NAME': os.getenv('PG_DATABASE'),
+        'USER': os.getenv('PG_USERNAME'),
+        'PASSWORD': os.getenv('PG_PASSWORD'),
         'HOST': 'localhost',
         'PORT': 5432,
     }

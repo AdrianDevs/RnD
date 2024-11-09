@@ -7,64 +7,58 @@ generators.py   # Top-down schema generation
 
 See schemas.__init__.py for package overview.
 """
-def get_pk_name(model):
-    ...
 
-def is_api_view(callback): # -> bool:
+def get_pk_name(model): ...
+def is_api_view(callback):  # -> bool:
     """
     Return `True` if the given view callback is a REST framework view/viewset.
     """
     ...
 
-def endpoint_ordering(endpoint): # -> tuple[int]:
+def endpoint_ordering(endpoint):  # -> tuple[int]:
     ...
 
 _PATH_PARAMETER_COMPONENT_RE = ...
+
 class EndpointEnumerator:
     """
     A class to determine the available API endpoints that a project exposes.
     """
-    def __init__(self, patterns=..., urlconf=...) -> None:
-        ...
-    
-    def get_api_endpoints(self, patterns=..., prefix=...): # -> list[Any]:
+    def __init__(self, patterns=..., urlconf=...) -> None: ...
+    def get_api_endpoints(self, patterns=..., prefix=...):  # -> list[Any]:
         """
         Return a list of all available API endpoints by inspecting the URL conf.
         """
         ...
-    
-    def get_path_from_regex(self, path_regex): # -> str:
+
+    def get_path_from_regex(self, path_regex):  # -> str:
         """
         Given a URL conf regex, return a URI template string.
         """
         ...
-    
-    def should_include_endpoint(self, path, callback): # -> bool:
+
+    def should_include_endpoint(self, path, callback):  # -> bool:
         """
         Return `True` if the given endpoint should be included.
         """
         ...
-    
-    def get_allowed_methods(self, callback): # -> list[Any]:
+
+    def get_allowed_methods(self, callback):  # -> list[Any]:
         """
         Return a list of the valid HTTP methods for this endpoint.
         """
         ...
-    
-
 
 class BaseSchemaGenerator:
     endpoint_inspector_cls = EndpointEnumerator
     coerce_path_pk = ...
-    def __init__(self, title=..., url=..., description=..., patterns=..., urlconf=..., version=...) -> None:
-        ...
-    
+    def __init__(self, title=..., url=..., description=..., patterns=..., urlconf=..., version=...) -> None: ...
     def create_view(self, callback, method, request=...):
         """
         Given a callback, return an actual view instance.
         """
         ...
-    
+
     def coerce_path(self, path, method, view):
         """
         Coerce {pk} path arguments into the name of the model field,
@@ -72,15 +66,10 @@ class BaseSchemaGenerator:
         (Ie. "this is an identifier", not "this is a database primary key")
         """
         ...
-    
-    def get_schema(self, request=..., public=...):
-        ...
-    
-    def has_view_permissions(self, path, method, view): # -> bool:
+
+    def get_schema(self, request=..., public=...): ...
+    def has_view_permissions(self, path, method, view):  # -> bool:
         """
         Return `True` if the incoming request has the correct view permissions.
         """
         ...
-    
-
-

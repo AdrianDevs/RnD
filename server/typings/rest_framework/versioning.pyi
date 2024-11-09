@@ -6,16 +6,11 @@ class BaseVersioning:
     default_version = ...
     allowed_versions = ...
     version_param = ...
-    def determine_version(self, request, *args, **kwargs):
+    def determine_version(self, request, *args, **kwargs): ...
+    def reverse(self, viewname, args=..., kwargs=..., request=..., format=..., **extra):  # -> str:
         ...
-    
-    def reverse(self, viewname, args=..., kwargs=..., request=..., format=..., **extra): # -> str:
+    def is_allowed_version(self, version):  # -> bool:
         ...
-    
-    def is_allowed_version(self, version): # -> bool:
-        ...
-    
-
 
 class AcceptHeaderVersioning(BaseVersioning):
     """
@@ -23,11 +18,10 @@ class AcceptHeaderVersioning(BaseVersioning):
     Host: example.com
     Accept: application/json; version=1.0
     """
-    invalid_version_message = ...
-    def determine_version(self, request, *args, **kwargs): # -> str:
-        ...
-    
 
+    invalid_version_message = ...
+    def determine_version(self, request, *args, **kwargs):  # -> str:
+        ...
 
 class URLPathVersioning(BaseVersioning):
     """
@@ -46,14 +40,12 @@ class URLPathVersioning(BaseVersioning):
     Host: example.com
     Accept: application/json
     """
-    invalid_version_message = ...
-    def determine_version(self, request, *args, **kwargs): # -> Any | list[Any] | None:
-        ...
-    
-    def reverse(self, viewname, args=..., kwargs=..., request=..., format=..., **extra): # -> str:
-        ...
-    
 
+    invalid_version_message = ...
+    def determine_version(self, request, *args, **kwargs):  # -> Any | list[Any] | None:
+        ...
+    def reverse(self, viewname, args=..., kwargs=..., request=..., format=..., **extra):  # -> str:
+        ...
 
 class NamespaceVersioning(BaseVersioning):
     """
@@ -79,17 +71,13 @@ class NamespaceVersioning(BaseVersioning):
     Host: example.com
     Accept: application/json
     """
-    invalid_version_message = ...
-    def determine_version(self, request, *args, **kwargs): # -> Any | list[Any] | None:
-        ...
-    
-    def reverse(self, viewname, args=..., kwargs=..., request=..., format=..., **extra): # -> str:
-        ...
-    
-    def get_versioned_viewname(self, viewname, request):
-        ...
-    
 
+    invalid_version_message = ...
+    def determine_version(self, request, *args, **kwargs):  # -> Any | list[Any] | None:
+        ...
+    def reverse(self, viewname, args=..., kwargs=..., request=..., format=..., **extra):  # -> str:
+        ...
+    def get_versioned_viewname(self, viewname, request): ...
 
 class HostNameVersioning(BaseVersioning):
     """
@@ -97,12 +85,11 @@ class HostNameVersioning(BaseVersioning):
     Host: v1.example.com
     Accept: application/json
     """
+
     hostname_regex = ...
     invalid_version_message = ...
-    def determine_version(self, request, *args, **kwargs): # -> Any | list[Any] | str | None:
+    def determine_version(self, request, *args, **kwargs):  # -> Any | list[Any] | str | None:
         ...
-    
-
 
 class QueryParameterVersioning(BaseVersioning):
     """
@@ -110,12 +97,8 @@ class QueryParameterVersioning(BaseVersioning):
     Host: example.com
     Accept: application/json
     """
+
     invalid_version_message = ...
-    def determine_version(self, request, *args, **kwargs):
+    def determine_version(self, request, *args, **kwargs): ...
+    def reverse(self, viewname, args=..., kwargs=..., request=..., format=..., **extra):  # -> str:
         ...
-    
-    def reverse(self, viewname, args=..., kwargs=..., request=..., format=..., **extra): # -> str:
-        ...
-    
-
-

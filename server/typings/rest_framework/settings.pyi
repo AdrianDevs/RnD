@@ -25,14 +25,15 @@ back to the defaults.
 DEFAULTS = ...
 IMPORT_STRINGS = ...
 REMOVED_SETTINGS = ...
-def perform_import(val, setting_name): # -> Any | list[Any] | None:
+
+def perform_import(val, setting_name):  # -> Any | list[Any] | None:
     """
     If the given setting is a string import notation,
     then perform the necessary import or imports.
     """
     ...
 
-def import_from_string(val, setting_name): # -> Any:
+def import_from_string(val, setting_name):  # -> Any:
     """
     Attempt to import a class from a string representation.
     """
@@ -54,22 +55,16 @@ class APISettings:
     under the REST_FRAMEWORK name. It is not intended to be used by 3rd-party
     apps, and test helpers like `override_settings` may not work as expected.
     """
-    def __init__(self, user_settings=..., defaults=..., import_strings=...) -> None:
-        ...
-    
+    def __init__(self, user_settings=..., defaults=..., import_strings=...) -> None: ...
     @property
-    def user_settings(self): # -> Any | dict[Any, Any]:
+    def user_settings(self):  # -> Any | dict[Any, Any]:
         ...
-    
-    def __getattr__(self, attr): # -> Any | list[Any] | None:
+    def __getattr__(self, attr):  # -> Any | list[Any] | None:
         ...
-    
-    def reload(self): # -> None:
+    def reload(self):  # -> None:
         ...
-    
-
 
 api_settings = ...
-def reload_api_settings(*args, **kwargs): # -> None:
-    ...
 
+def reload_api_settings(*args, **kwargs):  # -> None:
+    ...

@@ -6,82 +6,68 @@ from django import template
 
 register = ...
 class_re = ...
+
 @register.tag(name='code')
-def highlight_code(parser, token): # -> CodeNode:
+def highlight_code(parser, token):  # -> CodeNode:
     ...
 
 class CodeNode(template.Node):
     style = ...
-    def __init__(self, lang, code) -> None:
-        ...
-    
-    def render(self, context):
-        ...
-    
-
+    def __init__(self, lang, code) -> None: ...
+    def render(self, context): ...
 
 @register.filter()
-def with_location(fields, location): # -> list[Any]:
+def with_location(fields, location):  # -> list[Any]:
     ...
-
 @register.simple_tag
-def form_for_link(link): # -> SafeText:
+def form_for_link(link):  # -> SafeText:
     ...
-
 @register.simple_tag
-def render_markdown(markdown_text): # -> SafeText:
+def render_markdown(markdown_text):  # -> SafeText:
     ...
-
 @register.simple_tag
-def get_pagination_html(pager):
+def get_pagination_html(pager): ...
+@register.simple_tag
+def render_form(serializer, template_pack=...):  # -> Any:
     ...
-
 @register.simple_tag
-def render_form(serializer, template_pack=...): # -> Any:
-    ...
-
+def render_field(field, style): ...
 @register.simple_tag
-def render_field(field, style):
-    ...
-
-@register.simple_tag
-def optional_login(request): # -> SafeText | Literal['']:
+def optional_login(request):  # -> SafeText | Literal['']:
     """
     Include a login snippet if REST framework's login view is in the URLconf.
     """
     ...
 
 @register.simple_tag
-def optional_docs_login(request): # -> SafeText | Literal['log in']:
+def optional_docs_login(request):  # -> SafeText | Literal['log in']:
     """
     Include a login snippet if REST framework's login view is in the URLconf.
     """
     ...
 
 @register.simple_tag
-def optional_logout(request, user, csrf_token): # -> SafeText:
+def optional_logout(request, user, csrf_token):  # -> SafeText:
     """
     Include a logout snippet if REST framework's logout view is in the URLconf.
     """
     ...
 
 @register.simple_tag
-def add_query_param(request, key, val): # -> SafeText:
+def add_query_param(request, key, val):  # -> SafeText:
     """
     Add a query parameter to the current request url, and return the new url.
     """
     ...
 
 @register.filter
-def as_string(value): # -> Literal['']:
+def as_string(value):  # -> Literal['']:
     ...
-
 @register.filter
-def as_list_of_strings(value): # -> list[Any | str]:
+def as_list_of_strings(value):  # -> list[Any | str]:
     ...
-
 @register.filter
-def add_class(value, css_class): # -> SafeText:
+def add_class(value, css_class):  # -> SafeText:
     """
     https://stackoverflow.com/questions/4124220/django-adding-css-classes-when-rendering-form-fields-in-a-template
 
@@ -98,11 +84,10 @@ def add_class(value, css_class): # -> SafeText:
     ...
 
 @register.filter
-def format_value(value): # -> SafeText | Any | str:
+def format_value(value):  # -> SafeText | Any | str:
     ...
-
 @register.filter
-def items(value): # -> list[Any]:
+def items(value):  # -> list[Any]:
     """
     Simple filter to return the items of the dict. Useful when the dict may
     have a key 'items' which is resolved first in Django template dot-notation
@@ -125,14 +110,14 @@ def data(value):
     ...
 
 @register.filter
-def schema_links(section, sec_key=...): # -> dict[Any, Any]:
+def schema_links(section, sec_key=...):  # -> dict[Any, Any]:
     """
     Recursively find every link in a schema, even nested.
     """
     ...
 
 @register.filter
-def add_nested_class(value): # -> Literal['class=nested', '']:
+def add_nested_class(value):  # -> Literal['class=nested', '']:
     ...
 
 TRAILING_PUNCTUATION = ...
@@ -141,7 +126,8 @@ word_split_re = ...
 simple_url_re = ...
 simple_url_2_re = ...
 simple_email_re = ...
-def smart_urlquote_wrapper(matched_url): # -> str | None:
+
+def smart_urlquote_wrapper(matched_url):  # -> str | None:
     """
     Simple wrapper for smart_urlquote. ValueError("Invalid IPv6 URL") can
     be raised here, see issue #1386
@@ -149,10 +135,9 @@ def smart_urlquote_wrapper(matched_url): # -> str | None:
     ...
 
 @register.filter
-def break_long_headers(header): # -> SafeText:
+def break_long_headers(header):  # -> SafeText:
     """
     Breaks headers longer than 160 characters (~page length)
     when possible (are comma separated)
     """
     ...
-

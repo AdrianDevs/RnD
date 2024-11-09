@@ -8,7 +8,8 @@ from django.views.generic import View
 """
 Provides an APIView class that is the base of all views in REST framework.
 """
-def get_view_name(view): # -> Any | str:
+
+def get_view_name(view):  # -> Any | str:
     """
     Given a view instance, return a textual name to represent the view.
     This name is used in the browsable API, and in OPTIONS responses.
@@ -17,7 +18,7 @@ def get_view_name(view): # -> Any | str:
     """
     ...
 
-def get_view_description(view, html=...): # -> SafeText | str:
+def get_view_description(view, html=...):  # -> SafeText | str:
     """
     Given a view instance, return a textual description to represent the view.
     This name is used in the browsable API, and in OPTIONS responses.
@@ -26,10 +27,9 @@ def get_view_description(view, html=...): # -> SafeText | str:
     """
     ...
 
-def set_rollback(): # -> None:
+def set_rollback():  # -> None:
     ...
-
-def exception_handler(exc, context): # -> Response | None:
+def exception_handler(exc, context):  # -> Response | None:
     """
     Returns the response that should be used for any given exception.
 
@@ -53,7 +53,7 @@ class APIView(View):
     settings = ...
     schema = ...
     @classmethod
-    def as_view(cls, **initkwargs): # -> Callable[..., HttpResponse]:
+    def as_view(cls, **initkwargs):  # -> Callable[..., HttpResponse]:
         """
         Store the original class on the view function.
 
@@ -61,134 +61,133 @@ class APIView(View):
         reverse lookups.  Used for breadcrumb generation.
         """
         ...
-    
+
     @property
     def allowed_methods(self):
         """
         Wrap Django's private `_allowed_methods` interface in a public property.
         """
         ...
-    
+
     @property
-    def default_response_headers(self): # -> dict[str, str]:
+    def default_response_headers(self):  # -> dict[str, str]:
         ...
-    
     def http_method_not_allowed(self, request, *args, **kwargs):
         """
         If `request.method` does not correspond to a handler method,
         determine what kind of exception to raise.
         """
         ...
-    
+
     def permission_denied(self, request, message=..., code=...):
         """
         If request is not permitted, determine what kind of exception to raise.
         """
         ...
-    
+
     def throttled(self, request, wait):
         """
         If request is throttled, determine what kind of exception to raise.
         """
         ...
-    
-    def get_authenticate_header(self, request): # -> Any | None:
+
+    def get_authenticate_header(self, request):  # -> Any | None:
         """
         If a request is unauthenticated, determine the WWW-Authenticate
         header to use for 401 responses, if any.
         """
         ...
-    
-    def get_parser_context(self, http_request): # -> dict[str, Any]:
+
+    def get_parser_context(self, http_request):  # -> dict[str, Any]:
         """
         Returns a dict that is passed through to Parser.parse(),
         as the `parser_context` keyword argument.
         """
         ...
-    
-    def get_renderer_context(self): # -> dict[str, Any]:
+
+    def get_renderer_context(self):  # -> dict[str, Any]:
         """
         Returns a dict that is passed through to Renderer.render(),
         as the `renderer_context` keyword argument.
         """
         ...
-    
-    def get_exception_handler_context(self): # -> dict[str, Any]:
+
+    def get_exception_handler_context(self):  # -> dict[str, Any]:
         """
         Returns a dict that is passed through to EXCEPTION_HANDLER,
         as the `context` argument.
         """
         ...
-    
-    def get_view_name(self): # -> Any:
+
+    def get_view_name(self):  # -> Any:
         """
         Return the view name, as used in OPTIONS responses and in the
         browsable API.
         """
         ...
-    
-    def get_view_description(self, html=...): # -> Any:
+
+    def get_view_description(self, html=...):  # -> Any:
         """
         Return some descriptive text for the view, as used in OPTIONS responses
         and in the browsable API.
         """
         ...
-    
-    def get_format_suffix(self, **kwargs): # -> None:
+
+    def get_format_suffix(self, **kwargs):  # -> None:
         """
         Determine if the request includes a '.json' style format suffix
         """
         ...
-    
-    def get_renderers(self): # -> list[Any]:
+
+    def get_renderers(self):  # -> list[Any]:
         """
         Instantiates and returns the list of renderers that this view can use.
         """
         ...
-    
-    def get_parsers(self): # -> list[Any]:
+
+    def get_parsers(self):  # -> list[Any]:
         """
         Instantiates and returns the list of parsers that this view can use.
         """
         ...
-    
-    def get_authenticators(self): # -> list[Any]:
+
+    def get_authenticators(self):  # -> list[Any]:
         """
         Instantiates and returns the list of authenticators that this view can use.
         """
         ...
-    
-    def get_permissions(self): # -> list[Any]:
+
+    def get_permissions(self):  # -> list[Any]:
         """
         Instantiates and returns the list of permissions that this view requires.
         """
         ...
-    
-    def get_throttles(self): # -> list[Any]:
+
+    def get_throttles(self):  # -> list[Any]:
         """
         Instantiates and returns the list of throttles that this view uses.
         """
         ...
-    
-    def get_content_negotiator(self): # -> Any:
+
+    def get_content_negotiator(self):  # -> Any:
         """
         Instantiate and return the content negotiation class to use.
         """
         ...
-    
-    def get_exception_handler(self): # -> Any | list[Any] | None:
+
+    def get_exception_handler(self):  # -> Any | list[Any] | None:
         """
         Returns the exception handler that this view uses.
         """
         ...
-    
-    def perform_content_negotiation(self, request, force=...): # -> Any | tuple[Any, Any]:
+
+    def perform_content_negotiation(self, request, force=...):  # -> Any | tuple[Any, Any]:
         """
         Determine which renderer and media type to use render the response.
         """
         ...
-    
-    def perform_authentication(self, request): # -> None:
+
+    def perform_authentication(self, request):  # -> None:
         """
         Perform authentication on the incoming request.
 
@@ -197,75 +196,70 @@ class APIView(View):
         `request.user` or `request.auth` is accessed.
         """
         ...
-    
-    def check_permissions(self, request): # -> None:
+
+    def check_permissions(self, request):  # -> None:
         """
         Check if the request should be permitted.
         Raises an appropriate exception if the request is not permitted.
         """
         ...
-    
-    def check_object_permissions(self, request, obj): # -> None:
+
+    def check_object_permissions(self, request, obj):  # -> None:
         """
         Check if the request should be permitted for a given object.
         Raises an appropriate exception if the request is not permitted.
         """
         ...
-    
-    def check_throttles(self, request): # -> None:
+
+    def check_throttles(self, request):  # -> None:
         """
         Check if request should be throttled.
         Raises an appropriate exception if the request is throttled.
         """
         ...
-    
-    def determine_version(self, request, *args, **kwargs): # -> tuple[None, None] | tuple[Any, Any]:
+
+    def determine_version(self, request, *args, **kwargs):  # -> tuple[None, None] | tuple[Any, Any]:
         """
         If versioning is being used, then determine any API version for the
         incoming request. Returns a two-tuple of (version, versioning_scheme)
         """
         ...
-    
-    def initialize_request(self, request, *args, **kwargs): # -> Request:
+
+    def initialize_request(self, request, *args, **kwargs):  # -> Request:
         """
         Returns the initial request object.
         """
         ...
-    
-    def initial(self, request, *args, **kwargs): # -> None:
+
+    def initial(self, request, *args, **kwargs):  # -> None:
         """
         Runs anything that needs to occur prior to calling the method handler.
         """
         ...
-    
-    def finalize_response(self, request, response, *args, **kwargs): # -> Response | HttpResponseBase:
+
+    def finalize_response(self, request, response, *args, **kwargs):  # -> Response | HttpResponseBase:
         """
         Returns the final response object.
         """
         ...
-    
-    def handle_exception(self, exc): # -> Any:
+
+    def handle_exception(self, exc):  # -> Any:
         """
         Handle any exception that occurs, by returning an appropriate response,
         or re-raising the error.
         """
         ...
-    
-    def raise_uncaught_exception(self, exc):
-        ...
-    
-    def dispatch(self, request, *args, **kwargs): # -> Response | HttpResponseBase:
+
+    def raise_uncaught_exception(self, exc): ...
+    def dispatch(self, request, *args, **kwargs):  # -> Response | HttpResponseBase:
         """
         `.dispatch()` is pretty much the same as Django's regular dispatch,
         but with extra hooks for startup, finalize, and exception handling.
         """
         ...
-    
-    def options(self, request, *args, **kwargs): # -> Response:
+
+    def options(self, request, *args, **kwargs):  # -> Response:
         """
         Handler method for HTTP 'OPTIONS' request.
         """
         ...
-    
-
-

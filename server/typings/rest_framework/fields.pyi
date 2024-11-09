@@ -9,24 +9,24 @@ class empty:
 
     It is required because `None` may be a valid input or output value.
     """
-    ...
 
+    ...
 
 class BuiltinSignatureError(Exception):
     """
     Built-in function signatures are not inspectable. This exception is raised
     so the serializer can raise a helpful error message.
     """
+
     ...
 
-
-def is_simple_callable(obj): # -> bool:
+def is_simple_callable(obj):  # -> bool:
     """
     True if the object is a callable that takes no arguments.
     """
     ...
 
-def get_attribute(instance, attrs): # -> Any | None:
+def get_attribute(instance, attrs):  # -> Any | None:
     """
     Similar to Python's built in `getattr(instance, attr)`,
     but takes a list of nested attributes, instead of a single attribute.
@@ -35,7 +35,7 @@ def get_attribute(instance, attrs): # -> Any | None:
     """
     ...
 
-def to_choices_dict(choices): # -> dict[Any, Any]:
+def to_choices_dict(choices):  # -> dict[Any, Any]:
     """
     Convert choices into key/value dicts.
 
@@ -45,7 +45,7 @@ def to_choices_dict(choices): # -> dict[Any, Any]:
     """
     ...
 
-def flatten_choices_dict(choices): # -> dict[Any, Any]:
+def flatten_choices_dict(choices):  # -> dict[Any, Any]:
     """
     Convert a group choices dict into a flat dict of choices.
 
@@ -54,24 +54,17 @@ def flatten_choices_dict(choices): # -> dict[Any, Any]:
     """
     ...
 
-def iter_options(grouped_choices, cutoff=..., cutoff_text=...): # -> Generator[StartOptionGroup | Option | EndOptionGroup, Any, None]:
+def iter_options(
+    grouped_choices, cutoff=..., cutoff_text=...
+):  # -> Generator[StartOptionGroup | Option | EndOptionGroup, Any, None]:
     """
     Helper function for options and option groups in templates.
     """
-    class StartOptionGroup:
-        ...
-    
-    
-    class EndOptionGroup:
-        ...
-    
-    
-    class Option:
-        ...
-    
-    
+    class StartOptionGroup: ...
+    class EndOptionGroup: ...
+    class Option: ...
 
-def get_error_detail(exc_info): # -> list[ErrorDetail] | dict[Any, list[ErrorDetail]]:
+def get_error_detail(exc_info):  # -> list[ErrorDetail] | dict[Any, list[ErrorDetail]]:
     """
     Given a Django ValidationError, return a list of ErrorDetail,
     with the `code` populated.
@@ -84,31 +77,21 @@ class CreateOnlyDefault:
     for create operations, but that do not return any value for update
     operations.
     """
-    requires_context = ...
-    def __init__(self, default) -> None:
-        ...
-    
-    def __call__(self, serializer_field): # -> object | Any:
-        ...
-    
-    def __repr__(self): # -> str:
-        ...
-    
 
+    requires_context = ...
+    def __init__(self, default) -> None: ...
+    def __call__(self, serializer_field):  # -> object | Any:
+        ...
+    def __repr__(self):  # -> str:
+        ...
 
 class CurrentUserDefault:
     requires_context = ...
-    def __call__(self, serializer_field):
+    def __call__(self, serializer_field): ...
+    def __repr__(self):  # -> str:
         ...
-    
-    def __repr__(self): # -> str:
-        ...
-    
 
-
-class SkipField(Exception):
-    ...
-
+class SkipField(Exception): ...
 
 REGEX_TYPE = ...
 NOT_READ_ONLY_WRITE_ONLY = ...
@@ -116,58 +99,68 @@ NOT_READ_ONLY_REQUIRED = ...
 NOT_REQUIRED_DEFAULT = ...
 USE_READONLYFIELD = ...
 MISSING_ERROR_MESSAGE = ...
+
 class Field:
     _creation_counter = ...
     default_error_messages = ...
     default_validators = ...
     default_empty_html = ...
     initial = ...
-    def __init__(self, *, read_only=..., write_only=..., required=..., default=..., initial=..., source=..., label=..., help_text=..., style=..., error_messages=..., validators=..., allow_null=...) -> None:
+    def __init__(
+        self,
+        *,
+        read_only=...,
+        write_only=...,
+        required=...,
+        default=...,
+        initial=...,
+        source=...,
+        label=...,
+        help_text=...,
+        style=...,
+        error_messages=...,
+        validators=...,
+        allow_null=...,
+    ) -> None: ...
+    def __class_getitem__(cls, *args, **kwargs):  # -> type[Self]:
         ...
-    
-    def __class_getitem__(cls, *args, **kwargs): # -> type[Self]:
-        ...
-    
-    def bind(self, field_name, parent): # -> None:
+    def bind(self, field_name, parent):  # -> None:
         """
         Initializes the field name and parent for the field instance.
         Called when a field is added to the parent serializer instance.
         """
         ...
-    
+
     @property
-    def validators(self): # -> list[Any]:
+    def validators(self):  # -> list[Any]:
         ...
-    
     @validators.setter
-    def validators(self, validators): # -> None:
+    def validators(self, validators):  # -> None:
         ...
-    
-    def get_validators(self): # -> list[Any]:
+    def get_validators(self):  # -> list[Any]:
         ...
-    
-    def get_initial(self): # -> empty | None:
+    def get_initial(self):  # -> empty | None:
         """
         Return a value to use when the field is being returned as a primitive
         value, without any object instance.
         """
         ...
-    
-    def get_value(self, dictionary): # -> type[empty] | Literal[''] | None:
+
+    def get_value(self, dictionary):  # -> type[empty] | Literal[''] | None:
         """
         Given the *incoming* primitive data, return the value for this field
         that should be validated and transformed to a native value.
         """
         ...
-    
-    def get_attribute(self, instance): # -> Any | empty | None:
+
+    def get_attribute(self, instance):  # -> Any | empty | None:
         """
         Given the *outgoing* object instance, return the primitive value
         that should be used for this field.
         """
         ...
-    
-    def get_default(self): # -> empty:
+
+    def get_default(self):  # -> empty:
         """
         Return the default value to use when validating data if no input
         is provided for this field.
@@ -177,8 +170,10 @@ class Field:
         validated data for this field.
         """
         ...
-    
-    def validate_empty_values(self, data): # -> tuple[Literal[True], empty] | tuple[Literal[False], None] | tuple[Literal[True], None] | tuple[Literal[False], Any]:
+
+    def validate_empty_values(
+        self, data
+    ):  # -> tuple[Literal[True], empty] | tuple[Literal[False], None] | tuple[Literal[True], None] | tuple[Literal[False], Any]:
         """
         Validate empty values, and either:
 
@@ -190,8 +185,8 @@ class Field:
           have validation applied as normal.
         """
         ...
-    
-    def run_validation(self, data=...): # -> empty | None:
+
+    def run_validation(self, data=...):  # -> empty | None:
         """
         Validate a simple representation and return the internal value.
 
@@ -202,69 +197,67 @@ class Field:
         validated data.
         """
         ...
-    
-    def run_validators(self, value): # -> None:
+
+    def run_validators(self, value):  # -> None:
         """
         Test the given value against all the validators on the field,
         and either raise a `ValidationError` or simply return.
         """
         ...
-    
+
     def to_internal_value(self, data):
         """
         Transform the *incoming* primitive data into a native value.
         """
         ...
-    
+
     def to_representation(self, value):
         """
         Transform the *outgoing* native value into primitive data.
         """
         ...
-    
+
     def fail(self, key, **kwargs):
         """
         A helper method that simply raises a validation error.
         """
         ...
-    
+
     @property
-    def root(self): # -> Self:
+    def root(self):  # -> Self:
         """
         Returns the top-level serializer for this field.
         """
         ...
-    
+
     @property
-    def context(self): # -> Any | dict[Any, Any]:
+    def context(self):  # -> Any | dict[Any, Any]:
         """
         Returns the context as passed to the root serializer on initialization.
         """
         ...
-    
-    def __new__(cls, *args, **kwargs): # -> Self:
+
+    def __new__(cls, *args, **kwargs):  # -> Self:
         """
         When a field is instantiated, we store the arguments that were used,
         so that we can present a helpful representation of the object.
         """
         ...
-    
-    def __deepcopy__(self, memo): # -> Self:
+
+    def __deepcopy__(self, memo):  # -> Self:
         """
         When cloning fields we instantiate using the arguments it was
         originally created with, rather than copying the complete state.
         """
         ...
-    
-    def __repr__(self): # -> str:
+
+    def __repr__(self):  # -> str:
         """
         Fields are represented using their initial calling arguments.
         This allows us to create descriptive representations for serializer
         instances that show all the declared fields on the serializer.
         """
         ...
-    
-
 
 class BooleanField(Field):
     default_error_messages = ...
@@ -273,132 +266,101 @@ class BooleanField(Field):
     TRUE_VALUES = ...
     FALSE_VALUES = ...
     NULL_VALUES = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def to_internal_value(self, data):  # -> bool | None:
         ...
-    
-    def to_internal_value(self, data): # -> bool | None:
+    def to_representation(self, value):  # -> bool | None:
         ...
-    
-    def to_representation(self, value): # -> bool | None:
-        ...
-    
-
 
 class CharField(Field):
     default_error_messages = ...
     initial = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def run_validation(self, data=...):  # -> empty | Literal[''] | None:
         ...
-    
-    def run_validation(self, data=...): # -> empty | Literal[''] | None:
+    def to_internal_value(self, data):  # -> str:
         ...
-    
-    def to_internal_value(self, data): # -> str:
+    def to_representation(self, value):  # -> str:
         ...
-    
-    def to_representation(self, value): # -> str:
-        ...
-    
-
 
 class EmailField(CharField):
     default_error_messages = ...
-    def __init__(self, **kwargs) -> None:
-        ...
-    
-
+    def __init__(self, **kwargs) -> None: ...
 
 class RegexField(CharField):
     default_error_messages = ...
-    def __init__(self, regex, **kwargs) -> None:
-        ...
-    
-
+    def __init__(self, regex, **kwargs) -> None: ...
 
 class SlugField(CharField):
     default_error_messages = ...
-    def __init__(self, allow_unicode=..., **kwargs) -> None:
-        ...
-    
-
+    def __init__(self, allow_unicode=..., **kwargs) -> None: ...
 
 class URLField(CharField):
     default_error_messages = ...
-    def __init__(self, **kwargs) -> None:
-        ...
-    
-
+    def __init__(self, **kwargs) -> None: ...
 
 class UUIDField(Field):
     valid_formats = ...
     default_error_messages = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def to_internal_value(self, data):  # -> UUID:
         ...
-    
-    def to_internal_value(self, data): # -> UUID:
+    def to_representation(self, value):  # -> str | Any:
         ...
-    
-    def to_representation(self, value): # -> str | Any:
-        ...
-    
-
 
 class IPAddressField(CharField):
     """Support both IPAddressField and GenericIPAddressField"""
-    default_error_messages = ...
-    def __init__(self, protocol=..., **kwargs) -> None:
-        ...
-    
-    def to_internal_value(self, data): # -> str:
-        ...
-    
 
+    default_error_messages = ...
+    def __init__(self, protocol=..., **kwargs) -> None: ...
+    def to_internal_value(self, data):  # -> str:
+        ...
 
 class IntegerField(Field):
     default_error_messages = ...
     MAX_STRING_LENGTH = ...
     re_decimal = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def to_internal_value(self, data):  # -> int:
         ...
-    
-    def to_internal_value(self, data): # -> int:
+    def to_representation(self, value):  # -> int:
         ...
-    
-    def to_representation(self, value): # -> int:
-        ...
-    
-
 
 class FloatField(Field):
     default_error_messages = ...
     MAX_STRING_LENGTH = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def to_internal_value(self, data):  # -> float:
         ...
-    
-    def to_internal_value(self, data): # -> float:
+    def to_representation(self, value):  # -> float:
         ...
-    
-    def to_representation(self, value): # -> float:
-        ...
-    
-
 
 class DecimalField(Field):
     default_error_messages = ...
     MAX_STRING_LENGTH = ...
-    def __init__(self, max_digits, decimal_places, coerce_to_string=..., max_value=..., min_value=..., localize=..., rounding=..., normalize_output=..., **kwargs) -> None:
+    def __init__(
+        self,
+        max_digits,
+        decimal_places,
+        coerce_to_string=...,
+        max_value=...,
+        min_value=...,
+        localize=...,
+        rounding=...,
+        normalize_output=...,
+        **kwargs,
+    ) -> None: ...
+    def validate_empty_values(
+        self, data
+    ):  # -> tuple[Literal[True], None] | tuple[Literal[True], empty] | tuple[Literal[False], None] | tuple[Literal[False], Any]:
         ...
-    
-    def validate_empty_values(self, data): # -> tuple[Literal[True], None] | tuple[Literal[True], empty] | tuple[Literal[False], None] | tuple[Literal[False], Any]:
-        ...
-    
     def to_internal_value(self, data):
         """
         Validate that the input is a decimal number and return a Decimal
         instance.
         """
         ...
-    
+
     def validate_precision(self, value):
         """
         Ensure that there are no more than max_digits in the number, and no
@@ -408,238 +370,164 @@ class DecimalField(Field):
         values or to enhance it in any way you need to.
         """
         ...
-    
-    def to_representation(self, value): # -> Decimal | str | None:
+
+    def to_representation(self, value):  # -> Decimal | str | None:
         ...
-    
     def quantize(self, value):
         """
         Quantize the decimal value to the configured precision.
         """
         ...
-    
-
 
 class DateTimeField(Field):
     default_error_messages = ...
     datetime_parser = ...
-    def __init__(self, format=..., input_formats=..., default_timezone=..., **kwargs) -> None:
-        ...
-    
-    def enforce_timezone(self, value): # -> datetime:
+    def __init__(self, format=..., input_formats=..., default_timezone=..., **kwargs) -> None: ...
+    def enforce_timezone(self, value):  # -> datetime:
         """
         When `self.default_timezone` is `None`, always return naive datetimes.
         When `self.default_timezone` is not `None`, always return aware datetimes.
         """
         ...
-    
-    def default_timezone(self): # -> BaseTzInfo | None:
-        ...
-    
-    def to_internal_value(self, value): # -> datetime:
-        ...
-    
-    def to_representation(self, value): # -> str | None:
-        ...
-    
 
+    def default_timezone(self):  # -> BaseTzInfo | None:
+        ...
+    def to_internal_value(self, value):  # -> datetime:
+        ...
+    def to_representation(self, value):  # -> str | None:
+        ...
 
 class DateField(Field):
     default_error_messages = ...
     datetime_parser = ...
-    def __init__(self, format=..., input_formats=..., **kwargs) -> None:
+    def __init__(self, format=..., input_formats=..., **kwargs) -> None: ...
+    def to_internal_value(self, value):  # -> date:
         ...
-    
-    def to_internal_value(self, value): # -> date:
+    def to_representation(self, value):  # -> str | None:
         ...
-    
-    def to_representation(self, value): # -> str | None:
-        ...
-    
-
 
 class TimeField(Field):
     default_error_messages = ...
     datetime_parser = ...
-    def __init__(self, format=..., input_formats=..., **kwargs) -> None:
+    def __init__(self, format=..., input_formats=..., **kwargs) -> None: ...
+    def to_internal_value(self, value):  # -> time:
         ...
-    
-    def to_internal_value(self, value): # -> time:
+    def to_representation(self, value):  # -> str | None:
         ...
-    
-    def to_representation(self, value): # -> str | None:
-        ...
-    
-
 
 class DurationField(Field):
     default_error_messages = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def to_internal_value(self, value):  # -> timedelta:
         ...
-    
-    def to_internal_value(self, value): # -> timedelta:
+    def to_representation(self, value):  # -> str:
         ...
-    
-    def to_representation(self, value): # -> str:
-        ...
-    
-
 
 class ChoiceField(Field):
     default_error_messages = ...
     html_cutoff = ...
     html_cutoff_text = ...
-    def __init__(self, choices, **kwargs) -> None:
+    def __init__(self, choices, **kwargs) -> None: ...
+    def to_internal_value(self, data):  # -> Enum | Any | Literal['']:
         ...
-    
-    def to_internal_value(self, data): # -> Enum | Any | Literal['']:
+    def to_representation(self, value):  # -> Enum | Any:
         ...
-    
-    def to_representation(self, value): # -> Enum | Any:
-        ...
-    
-    def iter_options(self): # -> Generator[StartOptionGroup | Option | EndOptionGroup, Any, None]:
+    def iter_options(self):  # -> Generator[StartOptionGroup | Option | EndOptionGroup, Any, None]:
         """
         Helper method for use with templates rendering select widgets.
         """
         ...
-    
-    choices = ...
 
+    choices = ...
 
 class MultipleChoiceField(ChoiceField):
     default_error_messages = ...
     default_empty_html = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def get_value(self, dictionary):  # -> type[empty]:
         ...
-    
-    def get_value(self, dictionary): # -> type[empty]:
+    def to_internal_value(self, data):  # -> set[Enum | Any | str]:
         ...
-    
-    def to_internal_value(self, data): # -> set[Enum | Any | str]:
+    def to_representation(self, value):  # -> set[Enum | Any]:
         ...
-    
-    def to_representation(self, value): # -> set[Enum | Any]:
-        ...
-    
-
 
 class FilePathField(ChoiceField):
     default_error_messages = ...
-    def __init__(self, path, match=..., recursive=..., allow_files=..., allow_folders=..., required=..., **kwargs) -> None:
-        ...
-    
-
+    def __init__(
+        self, path, match=..., recursive=..., allow_files=..., allow_folders=..., required=..., **kwargs
+    ) -> None: ...
 
 class FileField(Field):
     default_error_messages = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def to_internal_value(self, data): ...
+    def to_representation(self, value):  # -> Any | None:
         ...
-    
-    def to_internal_value(self, data):
-        ...
-    
-    def to_representation(self, value): # -> Any | None:
-        ...
-    
-
 
 class ImageField(FileField):
     default_error_messages = ...
-    def __init__(self, **kwargs) -> None:
-        ...
-    
-    def to_internal_value(self, data):
-        ...
-    
-
+    def __init__(self, **kwargs) -> None: ...
+    def to_internal_value(self, data): ...
 
 class _UnvalidatedField(Field):
-    def __init__(self, **kwargs) -> None:
-        ...
-    
-    def to_internal_value(self, data):
-        ...
-    
-    def to_representation(self, value):
-        ...
-    
-
+    def __init__(self, **kwargs) -> None: ...
+    def to_internal_value(self, data): ...
+    def to_representation(self, value): ...
 
 class ListField(Field):
     child = ...
     initial = ...
     default_error_messages = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def get_value(self, dictionary):  # -> type[empty] | list[Any]:
         ...
-    
-    def get_value(self, dictionary): # -> type[empty] | list[Any]:
-        ...
-    
-    def to_internal_value(self, data): # -> list[Any]:
+    def to_internal_value(self, data):  # -> list[Any]:
         """
         List of dicts of native values <- List of dicts of primitive datatypes.
         """
         ...
-    
-    def to_representation(self, data): # -> list[Any | None]:
+
+    def to_representation(self, data):  # -> list[Any | None]:
         """
         List of object instances -> List of dicts of primitive datatypes.
         """
         ...
-    
-    def run_child_validation(self, data): # -> list[Any]:
-        ...
-    
 
+    def run_child_validation(self, data):  # -> list[Any]:
+        ...
 
 class DictField(Field):
     child = ...
     initial = ...
     default_error_messages = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def get_value(self, dictionary):  # -> MultiValueDict[Any, Any]:
         ...
-    
-    def get_value(self, dictionary): # -> MultiValueDict[Any, Any]:
-        ...
-    
-    def to_internal_value(self, data): # -> dict[Any, Any]:
+    def to_internal_value(self, data):  # -> dict[Any, Any]:
         """
         Dicts of native values <- Dicts of primitive datatypes.
         """
         ...
-    
-    def to_representation(self, value): # -> dict[str, Any | None]:
-        ...
-    
-    def run_child_validation(self, data): # -> dict[Any, Any]:
-        ...
-    
 
+    def to_representation(self, value):  # -> dict[str, Any | None]:
+        ...
+    def run_child_validation(self, data):  # -> dict[Any, Any]:
+        ...
 
 class HStoreField(DictField):
     child = ...
-    def __init__(self, **kwargs) -> None:
-        ...
-    
-
+    def __init__(self, **kwargs) -> None: ...
 
 class JSONField(Field):
     default_error_messages = ...
     _is_jsonfield = ...
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def get_value(self, dictionary):  # -> JSONString:
         ...
-    
-    def get_value(self, dictionary): # -> JSONString:
+    def to_internal_value(self, data):  # -> Any:
         ...
-    
-    def to_internal_value(self, data): # -> Any:
+    def to_representation(self, value):  # -> bytes:
         ...
-    
-    def to_representation(self, value): # -> bytes:
-        ...
-    
-
 
 class ReadOnlyField(Field):
     """
@@ -653,13 +541,8 @@ class ReadOnlyField(Field):
     class ExampleSerializer(Serializer):
         expiry_date = ReadOnlyField(source='get_expiry_date')
     """
-    def __init__(self, **kwargs) -> None:
-        ...
-    
-    def to_representation(self, value):
-        ...
-    
-
+    def __init__(self, **kwargs) -> None: ...
+    def to_representation(self, value): ...
 
 class HiddenField(Field):
     """
@@ -669,16 +552,10 @@ class HiddenField(Field):
     constraint on a pair of fields, as we need some way to include the date in
     the validated data.
     """
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None: ...
+    def get_value(self, dictionary):  # -> type[empty]:
         ...
-    
-    def get_value(self, dictionary): # -> type[empty]:
-        ...
-    
-    def to_internal_value(self, data):
-        ...
-    
-
+    def to_internal_value(self, data): ...
 
 class SerializerMethodField(Field):
     """
@@ -695,16 +572,11 @@ class SerializerMethodField(Field):
         def get_extra_info(self, obj):
             return ...  # Calculate some data to return.
     """
-    def __init__(self, method_name=..., **kwargs) -> None:
+    def __init__(self, method_name=..., **kwargs) -> None: ...
+    def bind(self, field_name, parent):  # -> None:
         ...
-    
-    def bind(self, field_name, parent): # -> None:
+    def to_representation(self, value):  # -> Any:
         ...
-    
-    def to_representation(self, value): # -> Any:
-        ...
-    
-
 
 class ModelField(Field):
     """
@@ -713,18 +585,9 @@ class ModelField(Field):
     This is used by `ModelSerializer` when dealing with custom model fields,
     that do not have a serializer field to be mapped to.
     """
+
     default_error_messages = ...
-    def __init__(self, model_field, **kwargs) -> None:
-        ...
-    
-    def to_internal_value(self, data):
-        ...
-    
-    def get_attribute(self, obj):
-        ...
-    
-    def to_representation(self, obj):
-        ...
-    
-
-
+    def __init__(self, model_field, **kwargs) -> None: ...
+    def to_internal_value(self, data): ...
+    def get_attribute(self, obj): ...
+    def to_representation(self, obj): ...

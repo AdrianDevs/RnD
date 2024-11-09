@@ -7,6 +7,7 @@ class LocationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
+
 class OccupationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Occupation.objects.all()
     serializer_class = OccupationSerializer

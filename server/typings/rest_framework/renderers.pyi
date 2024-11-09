@@ -13,7 +13,8 @@ on the response, such as JSON encoded data or HTML output.
 
 REST framework also provides an HTML renderer that renders the browsable API.
 """
-def zero_as_none(value): # -> None:
+
+def zero_as_none(value):  # -> None:
     ...
 
 class BaseRenderer:
@@ -21,19 +22,18 @@ class BaseRenderer:
     All renderers should extend this class, setting the `media_type`
     and `format` attributes, and override the `.render()` method.
     """
+
     media_type = ...
     format = ...
     charset = ...
     render_style = ...
-    def render(self, data, accepted_media_type=..., renderer_context=...):
-        ...
-    
-
+    def render(self, data, accepted_media_type=..., renderer_context=...): ...
 
 class JSONRenderer(BaseRenderer):
     """
     Renderer which serializes to JSON.
     """
+
     media_type = ...
     format = ...
     encoder_class = encoders.JSONEncoder
@@ -41,16 +41,13 @@ class JSONRenderer(BaseRenderer):
     compact = ...
     strict = ...
     charset = ...
-    def get_indent(self, accepted_media_type, renderer_context): # -> int | None:
+    def get_indent(self, accepted_media_type, renderer_context):  # -> int | None:
         ...
-    
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> bytes:
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> bytes:
         """
         Render `data` into JSON, returning a bytestring.
         """
         ...
-    
-
 
 class TemplateHTMLRenderer(BaseRenderer):
     """
@@ -71,12 +68,13 @@ class TemplateHTMLRenderer(BaseRenderer):
 
     For pre-rendered HTML, see StaticHTMLRenderer.
     """
+
     media_type = ...
     format = ...
     template_name = ...
     exception_template_names = ...
     charset = ...
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> Any:
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> Any:
         """
         Renders data to HTML, using Django's standard template rendering.
 
@@ -87,20 +85,14 @@ class TemplateHTMLRenderer(BaseRenderer):
         3. The return result of calling view.get_template_names().
         """
         ...
-    
-    def resolve_template(self, template_names): # -> Any:
-        ...
-    
-    def get_template_context(self, data, renderer_context):
-        ...
-    
-    def get_template_names(self, response, view): # -> list[Any] | list[Never]:
-        ...
-    
-    def get_exception_template(self, response): # -> Any | Template:
-        ...
-    
 
+    def resolve_template(self, template_names):  # -> Any:
+        ...
+    def get_template_context(self, data, renderer_context): ...
+    def get_template_names(self, response, view):  # -> list[Any] | list[Never]:
+        ...
+    def get_exception_template(self, response):  # -> Any | Template:
+        ...
 
 class StaticHTMLRenderer(TemplateHTMLRenderer):
     """
@@ -115,13 +107,12 @@ class StaticHTMLRenderer(TemplateHTMLRenderer):
 
     For template rendered HTML, see TemplateHTMLRenderer.
     """
+
     media_type = ...
     format = ...
     charset = ...
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> Any:
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> Any:
         ...
-    
-
 
 class HTMLFormRenderer(BaseRenderer):
     """
@@ -134,27 +125,26 @@ class HTMLFormRenderer(BaseRenderer):
 
     Note that rendering of field and form errors is not currently supported.
     """
+
     media_type = ...
     format = ...
     charset = ...
     template_pack = ...
     base_template = ...
     default_style = ...
-    def render_field(self, field, parent_style): # -> Any | Literal['']:
+    def render_field(self, field, parent_style):  # -> Any | Literal['']:
         ...
-    
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> Any:
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> Any:
         """
         Render serializer data and return an HTML form, as a string.
         """
         ...
-    
-
 
 class BrowsableAPIRenderer(BaseRenderer):
     """
     HTML renderer used to self-document the API.
     """
+
     media_type = ...
     format = ...
     template = ...
@@ -162,27 +152,27 @@ class BrowsableAPIRenderer(BaseRenderer):
     code_style = ...
     charset = ...
     form_renderer_class = HTMLFormRenderer
-    def get_default_renderer(self, view): # -> None:
+    def get_default_renderer(self, view):  # -> None:
         """
         Return an instance of the first valid renderer.
         (Don't use another documenting renderer.)
         """
         ...
-    
-    def get_content(self, renderer, data, accepted_media_type, renderer_context): # -> str:
+
+    def get_content(self, renderer, data, accepted_media_type, renderer_context):  # -> str:
         """
         Get the content as if it had been rendered by the default
         non-documenting renderer.
         """
         ...
-    
-    def show_form_for_method(self, view, method, request, obj): # -> bool | None:
+
+    def show_form_for_method(self, view, method, request, obj):  # -> bool | None:
         """
         Returns True if a form should be shown for this method.
         """
         ...
-    
-    def get_rendered_html_form(self, data, view, method, request): # -> Any | Literal[True] | None:
+
+    def get_rendered_html_form(self, data, view, method, request):  # -> Any | Literal[True] | None:
         """
         Return a string representing a rendered HTML form, possibly bound to
         either the input or output data.
@@ -190,60 +180,49 @@ class BrowsableAPIRenderer(BaseRenderer):
         In the absence of the View having an associated form then return None.
         """
         ...
-    
-    def render_form_for_serializer(self, serializer): # -> Any | None:
+
+    def render_form_for_serializer(self, serializer):  # -> Any | None:
         ...
-    
-    def get_raw_data_form(self, data, view, method, request): # -> GenericContentForm | None:
+    def get_raw_data_form(self, data, view, method, request):  # -> GenericContentForm | None:
         """
         Returns a form that allows for arbitrary content types to be tunneled
         via standard HTML forms.
         (Which are typically application/x-www-form-urlencoded)
         """
         ...
-    
-    def get_name(self, view):
+
+    def get_name(self, view): ...
+    def get_description(self, view, status_code):  # -> Literal['']:
         ...
-    
-    def get_description(self, view, status_code): # -> Literal['']:
+    def get_breadcrumbs(self, request): ...
+    def get_extra_actions(self, view, status_code):  # -> None:
         ...
-    
-    def get_breadcrumbs(self, request):
+    def get_filter_form(self, data, view, request):  # -> Any | None:
         ...
-    
-    def get_extra_actions(self, view, status_code): # -> None:
-        ...
-    
-    def get_filter_form(self, data, view, request): # -> Any | None:
-        ...
-    
-    def get_context(self, data, accepted_media_type, renderer_context): # -> dict[str, Any]:
+    def get_context(self, data, accepted_media_type, renderer_context):  # -> dict[str, Any]:
         """
         Returns the context used to render.
         """
         ...
-    
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> Any:
+
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> Any:
         """
         Render the HTML for the browsable API representation.
         """
         ...
-    
-
 
 class AdminRenderer(BrowsableAPIRenderer):
     template = ...
     format = ...
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> Any | Literal['']:
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> Any | Literal['']:
         ...
-    
-    def get_context(self, data, accepted_media_type, renderer_context): # -> dict[str, Any]:
+    def get_context(self, data, accepted_media_type, renderer_context):  # -> dict[str, Any]:
         """
         Render the HTML for the browsable API representation.
         """
         ...
-    
-    def get_result_url(self, result, view): # -> None:
+
+    def get_result_url(self, result, view):  # -> None:
         """
         Attempt to reverse the result's detail view URL.
 
@@ -251,8 +230,6 @@ class AdminRenderer(BrowsableAPIRenderer):
         and viewset-like (has `.basename` / `.reverse_action()`).
         """
         ...
-    
-
 
 class DocumentationRenderer(BaseRenderer):
     media_type = ...
@@ -262,103 +239,70 @@ class DocumentationRenderer(BaseRenderer):
     error_template = ...
     code_style = ...
     languages = ...
-    def get_context(self, data, request): # -> dict[str, Any]:
+    def get_context(self, data, request):  # -> dict[str, Any]:
         ...
-    
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> Any:
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> Any:
         ...
-    
-
 
 class SchemaJSRenderer(BaseRenderer):
     media_type = ...
     format = ...
     charset = ...
     template = ...
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> Any:
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> Any:
         ...
-    
-
 
 class MultiPartRenderer(BaseRenderer):
     media_type = ...
     format = ...
     charset = ...
     BOUNDARY = ...
-    def render(self, data, accepted_media_type=..., renderer_context=...): # -> bytes:
+    def render(self, data, accepted_media_type=..., renderer_context=...):  # -> bytes:
         ...
-    
-
 
 class CoreJSONRenderer(BaseRenderer):
     media_type = ...
     charset = ...
     format = ...
-    def __init__(self) -> None:
-        ...
-    
-    def render(self, data, media_type=..., renderer_context=...):
-        ...
-    
-
+    def __init__(self) -> None: ...
+    def render(self, data, media_type=..., renderer_context=...): ...
 
 class _BaseOpenAPIRenderer:
-    def get_schema(self, instance): # -> dict[Any, Any]:
+    def get_schema(self, instance):  # -> dict[Any, Any]:
         ...
-    
-    def get_parameters(self, link): # -> list[Any]:
+    def get_parameters(self, link):  # -> list[Any]:
         ...
-    
-    def get_operation(self, link, name, tag): # -> dict[str, str | Any]:
+    def get_operation(self, link, name, tag):  # -> dict[str, str | Any]:
         ...
-    
-    def get_paths(self, document): # -> dict[Any, Any]:
+    def get_paths(self, document):  # -> dict[Any, Any]:
         ...
-    
-    def get_structure(self, data): # -> dict[str, Any]:
+    def get_structure(self, data):  # -> dict[str, Any]:
         ...
-    
-
 
 class CoreAPIOpenAPIRenderer(_BaseOpenAPIRenderer):
     media_type = ...
     charset = ...
     format = ...
-    def __init__(self) -> None:
+    def __init__(self) -> None: ...
+    def render(self, data, media_type=..., renderer_context=...):  # -> bytes:
         ...
-    
-    def render(self, data, media_type=..., renderer_context=...): # -> bytes:
-        ...
-    
-
 
 class CoreAPIJSONOpenAPIRenderer(_BaseOpenAPIRenderer):
     media_type = ...
     charset = ...
     format = ...
     ensure_ascii = ...
-    def __init__(self) -> None:
+    def __init__(self) -> None: ...
+    def render(self, data, media_type=..., renderer_context=...):  # -> bytes:
         ...
-    
-    def render(self, data, media_type=..., renderer_context=...): # -> bytes:
-        ...
-    
-
 
 class OpenAPIRenderer(BaseRenderer):
     media_type = ...
     charset = ...
     format = ...
-    def __init__(self) -> None:
-        ...
-    
-    def render(self, data, media_type=..., renderer_context=...): # -> bytes:
-        class Dumper(yaml.Dumper):
-            ...
-        
-        
-    
-
+    def __init__(self) -> None: ...
+    def render(self, data, media_type=..., renderer_context=...):  # -> bytes:
+        class Dumper(yaml.Dumper): ...
 
 class JSONOpenAPIRenderer(BaseRenderer):
     media_type = ...
@@ -366,8 +310,5 @@ class JSONOpenAPIRenderer(BaseRenderer):
     encoder_class = encoders.JSONEncoder
     format = ...
     ensure_ascii = ...
-    def render(self, data, media_type=..., renderer_context=...): # -> bytes:
+    def render(self, data, media_type=..., renderer_context=...):  # -> bytes:
         ...
-    
-
-

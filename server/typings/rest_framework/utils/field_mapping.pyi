@@ -7,6 +7,7 @@ Helper functions for mapping model fields to a dictionary of default
 keyword arguments that should be used for their equivalent serializer fields.
 """
 NUMERIC_FIELD_TYPES = ...
+
 class ClassLookupDict:
     """
     Takes a dictionary with classes as keys.
@@ -14,16 +15,10 @@ class ClassLookupDict:
     hierarchy in method resolution order, and returns the first matching value
     from the dictionary or raises a KeyError if nothing matches.
     """
-    def __init__(self, mapping) -> None:
+    def __init__(self, mapping) -> None: ...
+    def __getitem__(self, key): ...
+    def __setitem__(self, key, value):  # -> None:
         ...
-    
-    def __getitem__(self, key):
-        ...
-    
-    def __setitem__(self, key, value): # -> None:
-        ...
-    
-
 
 def needs_label(model_field, field_name):
     """
@@ -32,14 +27,14 @@ def needs_label(model_field, field_name):
     """
     ...
 
-def get_detail_view_name(model): # -> str:
+def get_detail_view_name(model):  # -> str:
     """
     Given a model class, return the view name to use for URL relationships
     that refer to instances of the model.
     """
     ...
 
-def get_unique_validators(field_name, model_field): # -> Generator[UniqueValidator, Any, None]:
+def get_unique_validators(field_name, model_field):  # -> Generator[UniqueValidator, Any, None]:
     """
     Returns a list of UniqueValidators that should be applied to the field.
     """
@@ -51,18 +46,14 @@ def get_field_kwargs(field_name, model_field):
     """
     ...
 
-def get_relation_kwargs(field_name, relation_info): # -> dict[str, Any]:
+def get_relation_kwargs(field_name, relation_info):  # -> dict[str, Any]:
     """
     Creates a default instance of a flat relational field.
     """
     ...
 
-def get_nested_relation_kwargs(relation_info): # -> dict[str, bool]:
+def get_nested_relation_kwargs(relation_info):  # -> dict[str, bool]:
     ...
-
-def get_url_kwargs(model_field): # -> dict[str, str]:
+def get_url_kwargs(model_field):  # -> dict[str, str]:
     ...
-
-def get_unique_error_message(model_field):
-    ...
-
+def get_unique_error_message(model_field): ...

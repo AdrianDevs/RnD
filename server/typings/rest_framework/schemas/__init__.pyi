@@ -29,9 +29,21 @@ basic use-cases:
 
 Other access should target the submodules directly
 """
-def get_schema_view(title=..., url=..., description=..., urlconf=..., renderer_classes=..., public=..., patterns=..., generator_class=..., authentication_classes=..., permission_classes=..., version=...): # -> Callable[..., HttpResponse]:
+
+def get_schema_view(
+    title=...,
+    url=...,
+    description=...,
+    urlconf=...,
+    renderer_classes=...,
+    public=...,
+    patterns=...,
+    generator_class=...,
+    authentication_classes=...,
+    permission_classes=...,
+    version=...,
+):  # -> Callable[..., HttpResponse]:
     """
     Return a schema view.
     """
     ...
-
