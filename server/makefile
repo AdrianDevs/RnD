@@ -58,6 +58,12 @@ migrate-apply:
 	@echo "Applying migrations..."
 	${PY_MIGRATE}
 
+# Format and lint the code
+lint:
+	@echo "Linting and formatting the code..."
+	ruff format
+	ruff check --fix
+	
 # Help command to display usage of the Makefile
 help:
 	@echo "Usage:"
@@ -70,4 +76,5 @@ help:
 	@echo "  make version  				- Show application version"
 	@echo "  make migrate-create	- Create migrations"
 	@echo "  make migrate-apply  	- Apply migrations"
+	@echo "  make lint		 				- Lint and formate the code
 	@echo "  make help     				- Show this help message"
