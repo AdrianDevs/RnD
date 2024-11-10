@@ -6,7 +6,7 @@ from surveys.questions.models import AnswerChoice, Brand, Question, QuestionType
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
-        fields = ['name']
+        fields = "__all__"
 
 
 class QuestionTypeSerializer(serializers.ModelSerializer):
@@ -47,9 +47,14 @@ class SurveySerializerReader(serializers.ModelSerializer):
 
 
 class SurveySerializerWriter(serializers.ModelSerializer):
+    # questions_and_answer_choices = serializers.ListField(child=serializers.DictField())
+
     class Meta:
         model = Survey
-        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'brand_id']
+        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'brand_id', ]
+
+    # def get_questions_and_answer_choices(self, obj):
+    #     return obj.questions_and_answer_choices
 
 
 class SurveyQuestionAndAnswerChoiceSerializerReader(serializers.ModelSerializer):

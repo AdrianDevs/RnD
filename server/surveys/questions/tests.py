@@ -1,6 +1,6 @@
 from rest_framework.test import APIClient, APIRequestFactory, APITestCase
 
-from surveys.questions.models import AnswerChoice, Brand, Question, QuestionType, Survey
+from surveys.questions.models import AnswerChoice, Brand, Question, QuestionType, Survey, SurveyQuestionAndAnswerChoice
 from surveys.questions.serializers import (
     AnswerChoiceSerializer,
     BrandSerializer,
@@ -249,3 +249,159 @@ class TestSurveyDetails(APITestCase):
         self.assertEqual(result['description'], 'Survey 1 Description')
         self.assertEqual(result['brand_name'], 'Brand 1')
         self.assertEqual(len(result['questions_and_answer_choices']), 1)
+
+    def test_create(self):
+        brand = create_brand('Brand 1')
+        survey = {
+            'name': 'Survey 1',
+            'description': 'Survey 1 Description',
+            'start_date': '2021-01-01',
+            'end_date': '2021-01-31',
+            'brand_id': brand.id,
+        }
+        response = self.client.post(self.uri, survey, format='json')
+        self.assertEqual(
+            response.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(response.status_code)
+        )
+        self.assertEqual(response.json()['name'], 'Survey 1')
+
+    def test_create_detailed_and_update_detailed(self):
+        # Create a survey with a question and an answer choice
+        brand = create_brand('Brand 1')
+        survey = {
+            'name': 'Survey 1',
+            'description': 'Survey 1 Description',
+            'start_date': '2021-01-01',
+            'end_date': '2021-01-31',
+            'brand_id': brand.id, # type: ignore
+        }
+        question_type_1 = create_question_type('Single Choice', 'Single Choice Question')
+        question_type_2 = create_question_type('Multiple Choice', 'Multiple Choice Question')
+        question_1 = create_question('What is your favorite color?', question_type_1.id)  # type: ignore
+        question_2 = create_question('What is your two favorite colors?', question_type_2.id)  # type: ignore
+        answer_choice_1 = create_answer_choice('Red')
+        answer_choice_2 = create_answer_choice('Green')
+        answer_choice_3 = create_answer_choice('Blue')
+        answer_choice_4 = create_answer_choice('Purple')
+        answer_choice_5 = create_answer_choice('Yellow')
+
+        survey['questions_and_answer_choices'] = [
+            {'question_id': question_1.id, 'answer_choice_ids': [answer_choice_1.id, answer_choice_4.id]},  # type: ignore
+            {'question_id': question_2.id, 'answer_choice_ids': [answer_choice_2.id, answer_choice_3.id, answer_choice_4.id, answer_choice_5.id]},  # type: ignore
+        ]
+
+        response = self.client.post(self.uri, survey, format='json')
+        self.assertEqual(
+            response.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(response.status_code)
+        )
+        
+        # Fetch the saved survey
+        response_data = response.json()
+        response = self.client.get(f'{self.uri}{response_data["id"]}/', format='json')
+        result = response.json()
+        self.assertEqual(
+            response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code)
+        )
+        self.assertEqual(result['name'], 'Survey 1')
+        self.assertEqual(result['description'], 'Survey 1 Description')
+        self.assertEqual(result['brand_name'], 'Brand 1')
+        self.assertEqual(len(result['questions_and_answer_choices']), 2)
+        self.assertEqual(result['questions_and_answer_choices'][0]['question']['text'], 'What is your favorite color?')
+        self.assertEqual(result['questions_and_answer_choices'][1]['question']['text'], 'What is your two favorite colors?')
+        self.assertEqual(len(result['questions_and_answer_choices'][0]['answer_choices']), 2)
+        self.assertEqual(result['questions_and_answer_choices'][0]['answer_choices'][0]['text'], 'Red')
+        self.assertEqual(result['questions_and_answer_choices'][0]['answer_choices'][1]['text'], 'Purple')
+        self.assertEqual(len(result['questions_and_answer_choices'][1]['answer_choices']), 4)
+        self.assertEqual(result['questions_and_answer_choices'][1]['answer_choices'][0]['text'], 'Green')
+        self.assertEqual(result['questions_and_answer_choices'][1]['answer_choices'][1]['text'], 'Blue')
+        self.assertEqual(result['questions_and_answer_choices'][1]['answer_choices'][2]['text'], 'Purple')
+        self.assertEqual(result['questions_and_answer_choices'][1]['answer_choices'][3]['text'], 'Yellow')
+
+        # Update the survey
+        survey['name'] = 'Survey 2'
+        survey['description'] = 'Survey 2 Description'
+        survey['brand_id'] = brand.id
+        survey['questions_and_answer_choices'][0]['answer_choice_ids'] = [answer_choice_1.id, answer_choice_2.id]
+        survey['questions_and_answer_choices'][1]['answer_choice_ids'] = [answer_choice_3.id, answer_choice_4.id]
+        response = self.client.put(f'{self.uri}{response_data["id"]}/', survey, format='json')
+
+        # Fetch the updated survey
+        response_data = response.json()
+        response = self.client.get(f'{self.uri}{response_data["id"]}/', format='json')
+        self.assertEqual(
+            response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code)
+        )
+        updated_survey = response.json()
+        print(updated_survey)
+        self.assertEqual(updated_survey['name'], 'Survey 2')
+        self.assertEqual(updated_survey['description'], 'Survey 2 Description')
+        self.assertEqual(updated_survey['brand_name'], 'Brand 1')
+        self.assertEqual(len(updated_survey['questions_and_answer_choices']), 2)
+        self.assertEqual(updated_survey['questions_and_answer_choices'][0]['question']['text'], 'What is your favorite color?')
+        self.assertEqual(updated_survey['questions_and_answer_choices'][1]['question']['text'], 'What is your two favorite colors?')
+        self.assertEqual(len(updated_survey['questions_and_answer_choices'][0]['answer_choices']), 2)
+        self.assertEqual(updated_survey['questions_and_answer_choices'][0]['answer_choices'][0]['text'], 'Red')
+        self.assertEqual(updated_survey['questions_and_answer_choices'][0]['answer_choices'][1]['text'], 'Green')
+        self.assertEqual(len(updated_survey['questions_and_answer_choices'][1]['answer_choices']), 2)
+        self.assertEqual(updated_survey['questions_and_answer_choices'][1]['answer_choices'][0]['text'], 'Blue')
+        self.assertEqual(updated_survey['questions_and_answer_choices'][1]['answer_choices'][1]['text'], 'Purple')
+
+    def test_delete(self):
+        # Create a survey with a question and an answer choice
+        brand = create_brand('Brand 1')
+        survey = {
+            'name': 'Survey 1',
+            'description': 'Survey 1 Description',
+            'start_date': '2021-01-01',
+            'end_date': '2021-01-31',
+            'brand_id': brand.id, # type: ignore
+        }
+        question_type_1 = create_question_type('Single Choice', 'Single Choice Question')
+        question_type_2 = create_question_type('Multiple Choice', 'Multiple Choice Question')
+        question_1 = create_question('What is your favorite color?', question_type_1.id)  # type: ignore
+        question_2 = create_question('What is your two favorite colors?', question_type_2.id)  # type: ignore
+        answer_choice_1 = create_answer_choice('Red')
+        answer_choice_2 = create_answer_choice('Green')
+        answer_choice_3 = create_answer_choice('Blue')
+        answer_choice_4 = create_answer_choice('Purple')
+        answer_choice_5 = create_answer_choice('Yellow')
+
+        survey['questions_and_answer_choices'] = [
+            {'question_id': question_1.id, 'answer_choice_ids': [answer_choice_1.id, answer_choice_4.id]},  # type: ignore
+            {'question_id': question_2.id, 'answer_choice_ids': [answer_choice_2.id, answer_choice_3.id, answer_choice_4.id, answer_choice_5.id]},  # type: ignore
+        ]
+
+        response = self.client.post(self.uri, survey, format='json')
+        self.assertEqual(
+            response.status_code, 201, 'Expected Response Code 201, received {0} instead.'.format(response.status_code)
+        )
+
+        # Delete the survey
+        response_data = response.json()
+        response = self.client.delete(f'{self.uri}{response_data["id"]}/', format='json')
+        self.assertEqual(
+            response.status_code, 204, 'Expected Response Code 204, received {0} instead.'.format(response.status_code)
+        )
+
+        # Fetch the deleted survey
+        response = self.client.get(f'{self.uri}{response_data["id"]}/', format='json')
+        self.assertEqual(
+            response.status_code, 404, 'Expected Response Code 404, received {0} instead.'.format(response.status_code)
+        )
+
+        # Make sure the survey is not in the list
+        response = self.client.get(self.uri, format='json')
+        result = response.json()
+        self.assertEqual(
+            response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code)
+        )
+        self.assertEqual(len(result), 0)
+
+        # Make sure the survey is not in the database
+        self.assertEqual(Survey.objects.count(), 0)
+
+        # Make sure survey questions and answer are not in the database
+        self.assertEqual(SurveyQuestionAndAnswerChoice.objects.count(), 0)
+
+        
+
