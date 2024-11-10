@@ -332,7 +332,6 @@ class TestSurveyDetails(APITestCase):
             response.status_code, 200, 'Expected Response Code 200, received {0} instead.'.format(response.status_code)
         )
         updated_survey = response.json()
-        print(updated_survey)
         self.assertEqual(updated_survey['name'], 'Survey 2')
         self.assertEqual(updated_survey['description'], 'Survey 2 Description')
         self.assertEqual(updated_survey['brand_name'], 'Brand 1')
