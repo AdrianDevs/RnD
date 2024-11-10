@@ -1,4 +1,5 @@
 import { Github, Smile } from 'lucide-react'
+import avatar from '@/assets/me.png'
 
 function About() {
   return (
@@ -23,6 +24,20 @@ function About() {
               <Github color="black" />
               <span className="text-green_dark underline hover:text-purple_dark">
                 GitHub
+              </span>
+            </a>
+          </div>
+          <div className="mt-8 flex flex-row justify-center gap-2">
+            <p>My website is here</p>
+            <a
+              className="q-6 flex h-6 flex-row gap-2"
+              href="https://www.adrianvn.me/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={avatar} alt="Icon of me" />
+              <span className="text-green_dark underline hover:text-purple_dark">
+                Adrianvn.me
               </span>
             </a>
           </div>

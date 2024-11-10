@@ -2,10 +2,6 @@
 
 A React and Django Demo Project
 
-<h1>Table of Contents
-
-[TOC]
-
 # Setup & Run
 
 Set up and run locally.
