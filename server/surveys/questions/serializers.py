@@ -36,26 +36,17 @@ class AnswerChoiceSerializer(serializers.ModelSerializer):
 
 
 class SurveySerializerReader(serializers.ModelSerializer):
-    # brand = serializers.SerializerMethodField()  # type: ignore
     brand = BrandSerializer(source='brand_id')
 
     class Meta:
         model = Survey
         fields = ['id', 'name', 'description', 'start_date', 'end_date', 'brand']
 
-    # def get_brand(self, obj):
-    #     return obj.brand_id
-
 
 class SurveySerializerWriter(serializers.ModelSerializer):
-    # questions_and_answer_choices = serializers.ListField(child=serializers.DictField())
-
     class Meta:
         model = Survey
         fields = ['id', 'name', 'description', 'start_date', 'end_date', 'brand_id', ]
-
-    # def get_questions_and_answer_choices(self, obj):
-    #     return obj.questions_and_answer_choices
 
 
 class SurveyQuestionAndAnswerChoiceSerializerReader(serializers.ModelSerializer):
