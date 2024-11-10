@@ -2,8 +2,13 @@ import { useSubmit } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Form } from './ui/form';
 import { useForm } from 'react-hook-form';
+import { Input } from './ui/input';
 
-const AppSidebarHeader = () => {
+type Props = {
+  onFilterChange: (filter: string) => void;
+};
+
+const AppSidebarHeader = ({ onFilterChange }: Props) => {
   const submit = useSubmit();
 
   const form = useForm();
@@ -31,6 +36,15 @@ const AppSidebarHeader = () => {
             <Button type="submit">New</Button>
           </form>
         </Form>
+        <div>
+          <Input
+            type="email"
+            placeholder="Filter"
+            onChange={(ev) => {
+              onFilterChange(ev.target.value);
+            }}
+          />
+        </div>
       </div>
     </div>
   );

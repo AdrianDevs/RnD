@@ -13,16 +13,31 @@ import { Survey } from '@/services/api';
 import { Inbox } from 'lucide-react';
 import { NavLink, useLoaderData } from 'react-router-dom';
 import AppSidebarHeader from './app-sidebar-header';
+import { useEffect, useState } from 'react';
 
 function AppSidebar() {
   const surveys = useLoaderData() as Survey[];
+  const [filter, setFilter] = useState('');
+  const [filteredSurveys, setFilteredSurveys] = useState(surveys);
+
+  const onFilterChange = (text: string) => {
+    setFilter(text);
+  };
+
+  useEffect(() => {
+    console.log('surveys', surveys);
+    const updatedSurveys = surveys.filter((survey) => {
+      return survey.name.toLowerCase().includes(filter.toLowerCase());
+    });
+    setFilteredSurveys(updatedSurveys);
+  }, [surveys, filter]);
 
   return (
     <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <AppSidebarHeader />
+            <AppSidebarHeader onFilterChange={onFilterChange} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -31,7 +46,7 @@ function AppSidebar() {
           <SidebarGroupLabel>Leads</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {surveys.map((survey) => (
+              {filteredSurveys.map((survey) => (
                 <SidebarMenuItem key={survey.id}>
                   <SidebarMenuButton asChild>
                     <NavLink
