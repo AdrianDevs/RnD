@@ -4,8 +4,8 @@ import {
   useLoaderData,
   useNavigate,
   useSubmit,
-} from 'react-router-dom';
-import { Calendar } from '@/components/ui/calendar';
+} from 'react-router-dom'
+import { Calendar } from '@/components/ui/calendar'
 import {
   Form,
   FormControl,
@@ -14,39 +14,39 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@/components/ui/popover'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { cn } from '@/lib/utils';
-import API, { Brand, Survey } from '@/services/api';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
+} from '@/components/ui/select'
+import { cn } from '@/lib/utils'
+import API, { Brand, Survey } from '@/services/api'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
+import { CalendarIcon } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
 
 export async function surveyEditLoader({ params }: LoaderFunctionArgs) {
-  const surveyId = params.surveyId;
+  const surveyId = params.surveyId
   const survey =
-    surveyId === 'new' ? null : await API.loadSurvey(Number(surveyId));
-  const brands = await API.loadBrands();
-  return { survey, brands };
+    surveyId === 'new' ? null : await API.loadSurvey(Number(surveyId))
+  const brands = await API.loadBrands()
+  return { survey, brands }
 }
 
 export function surveyEditAction() {
-  return null;
+  return null
 }
 
 const formSchema = z.object({
@@ -61,22 +61,27 @@ const formSchema = z.object({
   end_date: z.date({
     required_error: 'Survey end date',
   }),
-});
+})
 
 const EditSurvey = () => {
-  const navigate = useNavigate();
-  const submit = useSubmit();
+  const navigate = useNavigate()
+  const submit = useSubmit()
   const { survey, brands } = useLoaderData() as {
-    survey: Survey | null;
-    brands: Brand[];
-  };
+    survey: Survey | null
+    brands: Brand[]
+  }
 
-  const today = new Date();
+  const today = new Date()
   const nextMonth = new Date(
     today.getFullYear(),
     today.getMonth() + 1,
     today.getDate()
-  );
+  )
+  const nextYear = new Date(
+    today.getFullYear() + 1,
+    today.getMonth(),
+    today.getDate()
+  )
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -87,7 +92,7 @@ const EditSurvey = () => {
       start_date: today,
       end_date: nextMonth,
     },
-  });
+  })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const params = {
@@ -96,12 +101,13 @@ const EditSurvey = () => {
       start_date: format(values.start_date, 'yyyy-MM-dd'),
       end_date: format(values.end_date, 'yyyy-MM-dd'),
       brand_id: parseInt(values.brand_id),
-    };
-    let newSurvey: Survey;
+      questions_and_answer_choices: survey?.questions_and_answer_choices,
+    }
+    let newSurvey: Survey
     if (!survey) {
-      newSurvey = (await API.createSurvey(params)) as Survey;
+      newSurvey = (await API.createSurvey(params)) as Survey
     } else {
-      newSurvey = (await API.updateSurvey(survey.id, params)) as Survey;
+      newSurvey = (await API.updateSurvey(survey.id, params)) as Survey
     }
     submit(
       { surveyId: `${newSurvey.id}` },
@@ -110,176 +116,205 @@ const EditSurvey = () => {
         action: `/surveys/${newSurvey.id}`,
         encType: 'application/json',
       }
-    );
+    )
   }
 
-  return (
-    <Form {...form}>
-      {/* eslint-disable @typescript-eslint/no-misused-promises */}
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter a survey name" {...field} />
-                </FormControl>
-                <FormDescription>The name of the survey.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-        <FormField
-          control={form.control}
-          name="brand_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Brand</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a brand" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {brands &&
-                    brands.map((brand) => (
-                      <SelectItem key={brand.id} value={brand.id.toString()}>
-                        {brand.name}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                The brand that the survey is associated with.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Input placeholder="Survey description" {...field} />
-                </FormControl>
-                <FormDescription>
-                  The description of the survey.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-        <FormField
-          control={form.control}
-          name="start_date"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel>Start date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'w-[240px] pl-3 text-left font-normal',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, 'PPP')
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormDescription>
-                  Your date of birth is used to calculate your age.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-        <FormField
-          control={form.control}
-          name="end_date"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel>End date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'w-[240px] pl-3 text-left font-normal',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, 'PPP')
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormDescription>
-                  Your date of birth is used to calculate your age.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-        <Button type="button" onClick={() => navigate(-1)}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={!form.formState.isValid}>
-          Submit
-        </Button>
-      </form>
-    </Form>
-  );
-};
+  const title = survey ? 'Edit Survey' : 'New Survey'
 
-export default EditSurvey;
+  return (
+    <div className="flex flex-row justify-center">
+      <Form {...form}>
+        {/* eslint-disable @typescript-eslint/no-misused-promises */}
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div className="rounded-2xl bg-pink_medium p-16">
+            <h1 className="mb-8 font-chapeau text-4xl font-light text-black">
+              {title}
+            </h1>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel className="text-xl">Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter a survey name" {...field} />
+                    </FormControl>
+                    <FormDescription>The name of the survey.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="brand_id"
+              render={({ field }) => (
+                <FormItem className="mt-4">
+                  <FormLabel className="text-xl">Brand</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a brand" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {brands &&
+                        brands.map((brand) => (
+                          <SelectItem
+                            key={brand.id}
+                            value={brand.id.toString()}
+                          >
+                            {brand.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    The brand that the survey is associated with.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => {
+                return (
+                  <FormItem className="mt-4">
+                    <FormLabel className="text-xl">Description</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Survey description" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      The description of the survey.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="start_date"
+              render={({ field }) => {
+                return (
+                  <FormItem className="mt-4 justify-between">
+                    <div className="flex flex-row justify-between">
+                      <FormLabel className="mr-4 text-xl">Start date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={'outline'}
+                              className={cn(
+                                'w-[240px] pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, 'PPP')
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > nextYear || date < new Date('1900-01-01')
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <FormDescription>
+                      Your date of birth is used to calculate your age.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="end_date"
+              render={({ field }) => {
+                return (
+                  <FormItem className="mt-4">
+                    <div className="flex flex-row justify-between">
+                      <FormLabel className="mr-4 text-xl">End date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={'outline'}
+                              className={cn(
+                                'w-[240px] pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, 'PPP')
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > nextYear || date < new Date('1900-01-01')
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <FormDescription>
+                      Your date of birth is used to calculate your age.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <div className="mt-8 flex flex-row items-center justify-between gap-4">
+              <Button
+                className="m-2 w-full bg-purple_super_dark hover:bg-purple_medium hover:text-text_dark"
+                type="button"
+                onClick={() => navigate(-1)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="m-2 w-full bg-green_dark hover:bg-green_medium hover:text-text_dark"
+                type="submit"
+                disabled={!form.formState.isValid}
+              >
+                Submit
+              </Button>
+            </div>
+          </div>
+        </form>
+      </Form>
+    </div>
+  )
+}
+
+export default EditSurvey

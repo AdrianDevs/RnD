@@ -137,10 +137,22 @@
   }
 }
 
+@font-face {
+  font-family: 'Chapeau';
+  font-style: Medium;
+  src: url('./assets/fonts/Chapeau-Medium.woff2') format('woff2');
+  font-weight: 400;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
+  ,
+  html {
+    font-family: 'Quicksand', 'Poppins', 'sans-serif';
+  }
+  ,
   body {
     @apply bg-background text-foreground;
   }

@@ -20,7 +20,7 @@ class QuestionSerializerReader(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ['text', 'question_type']
+        fields = ['text', 'question_type_id', 'question_type']
 
 
 class QuestionSerializerWriter(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class QuestionSerializerWriter(serializers.ModelSerializer):
 class AnswerChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnswerChoice
-        fields = ['text']
+        fields = "__all__"
 
 
 class SurveySerializerReader(serializers.ModelSerializer):
@@ -64,7 +64,7 @@ class SurveyQuestionAndAnswerChoiceSerializerReader(serializers.ModelSerializer)
 
     class Meta:
         model = SurveyQuestionAndAnswerChoice
-        fields = ['survey_id', 'question', 'answer_choices']
+        fields = ['survey_id', 'question_id', 'question', 'answer_choice_ids', 'answer_choices']
 
 
 class SurveyQuestionAndAnswerChoiceSerializerWriter(serializers.ModelSerializer):

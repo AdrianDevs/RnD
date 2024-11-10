@@ -1,1 +1,5 @@
-
+.loading {
+  opacity: 0.5;
+  transition: opacity 200ms;
+  transition-delay: 200ms;
+}
