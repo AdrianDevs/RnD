@@ -25,13 +25,21 @@ class ApiMethods {
   static apiRequest<T extends object>(
     method: Method,
     url: string,
-    body = undefined
+    body?: object
   ) {
     url = BASE_URL + url;
-    return new Promise<T>((resolve, reject) => {
+    return new Promise<T | string>((resolve, reject) => {
       fetch(url, { method, body: JSON.stringify(body), headers: getHeaders() })
-        .then((res) => res.json())
-        .then(resolve)
+        .then(async (res) => {
+          if (res.headers.get('Content-Type')?.includes('application/json')) {
+            return res.json() as Promise<T>;
+          } else {
+            return Promise.resolve(res.text());
+          }
+        })
+        .then((result) => {
+          resolve(result);
+        })
         .catch(reject);
     });
   }

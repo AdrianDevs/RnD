@@ -1,11 +1,22 @@
-import { useNavigate } from 'react-router-dom';
+import { useSubmit } from 'react-router-dom';
 import { Button } from './ui/button';
+import { Form } from './ui/form';
+import { useForm } from 'react-hook-form';
 
 const AppSidebarHeader = () => {
-  const navigate = useNavigate();
+  const submit = useSubmit();
 
-  const onClick = () => {
-    navigate('/surveys/new');
+  const form = useForm();
+
+  const onSubmit = () => {
+    submit(
+      { surveyId: 'new' },
+      {
+        method: 'post',
+        action: `/surveys/new/edit`,
+        encType: 'application/json',
+      }
+    );
   };
 
   return (
@@ -14,12 +25,12 @@ const AppSidebarHeader = () => {
         <div className="text-lg font-semibold text-gray-800">
           Tracking Suits
         </div>
-        <Button
-          className="ml-2 p-1 text-gray-500 rounded-md hover:bg-gray-100"
-          onClick={onClick}
-        >
-          New
-        </Button>
+        <Form {...form}>
+          {/* eslint-disable @typescript-eslint/no-misused-promises */}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <Button type="submit">New</Button>
+          </form>
+        </Form>
       </div>
     </div>
   );

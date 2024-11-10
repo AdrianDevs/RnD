@@ -11,12 +11,11 @@ import {
 } from '@/components/ui/sidebar';
 import { Survey } from '@/services/api';
 import { Inbox } from 'lucide-react';
-import { Link, useLoaderData } from 'react-router-dom';
+import { NavLink, useLoaderData } from 'react-router-dom';
 import AppSidebarHeader from './app-sidebar-header';
 
 function AppSidebar() {
   const surveys = useLoaderData() as Survey[];
-  console.log('AppSidebar.surveys', surveys);
 
   return (
     <Sidebar>
@@ -35,10 +34,15 @@ function AppSidebar() {
               {surveys.map((survey) => (
                 <SidebarMenuItem key={survey.id}>
                   <SidebarMenuButton asChild>
-                    <Link to={`surveys/${survey.id}`}>
+                    <NavLink
+                      to={`surveys/${survey.id}`}
+                      className={({ isActive, isPending }) =>
+                        isActive ? 'active' : isPending ? 'pending' : ''
+                      }
+                    >
                       <Inbox />
                       <span>{survey.name}</span>
-                    </Link>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

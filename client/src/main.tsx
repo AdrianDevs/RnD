@@ -5,10 +5,15 @@ import './index.css';
 import Root from './routes/root.tsx';
 import ErrorPage from './routes/error.tsx';
 import About from './routes/about.tsx';
-import Survey from './routes/survey.tsx';
+import { surveyDetailsAction, surveyDetailsLoader } from './routes/survey.tsx';
 import API from './services/api.ts';
 import Index from './routes/index.tsx';
-import NewSurvey from './routes/survey-new.tsx';
+import SurveyView from './routes/survey.tsx';
+import EditSurvey, {
+  surveyEditAction,
+  surveyEditLoader,
+} from './routes/survey-edit.tsx';
+import { surveyDeleteAction } from './routes/survey-delete.tsx';
 
 const router = createBrowserRouter([
   {
@@ -22,14 +27,18 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Index /> },
           {
-            path: 'surveys/new',
-            element: <NewSurvey />,
-            loader: async () => await API.loadBrands(),
+            path: 'surveys/:surveyId',
+            element: <SurveyView />,
+            loader: surveyDetailsLoader,
+            action: surveyDetailsAction,
           },
           {
-            path: 'surveys/:surveyId',
-            element: <Survey />,
+            path: 'surveys/:surveyId/edit',
+            element: <EditSurvey />,
+            loader: surveyEditLoader,
+            action: surveyEditAction,
           },
+          { path: 'surveys/:surveyId/destroy', action: surveyDeleteAction },
           {
             path: 'about',
             element: <About />,

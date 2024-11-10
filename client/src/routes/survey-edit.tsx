@@ -1,4 +1,10 @@
-import { Button } from '@/components/ui/button';
+/* eslint-disable react-refresh/only-export-components */
+import {
+  LoaderFunctionArgs,
+  useLoaderData,
+  useNavigate,
+  useSubmit,
+} from 'react-router-dom';
 import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
@@ -23,21 +29,32 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import API, { Brand } from '@/services/api';
+import API, { Brand, Survey } from '@/services/api';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Description } from '@radix-ui/react-dialog';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useLoaderData } from 'react-router-dom';
 import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+
+export async function surveyEditLoader({ params }: LoaderFunctionArgs) {
+  const surveyId = params.surveyId;
+  const survey =
+    surveyId === 'new' ? null : await API.loadSurvey(Number(surveyId));
+  const brands = await API.loadBrands();
+  return { survey, brands };
+}
+
+export function surveyEditAction() {
+  return null;
+}
 
 const formSchema = z.object({
   name: z.string().min(5, {
     message: 'The survey name must be at least 5 characters.',
   }),
   brand_id: z.string({ required_error: 'Please select a brand' }),
-  description: z.string().optional(),
+  description: z.string().min(5, { message: 'Please enter a description' }),
   start_date: z.date({
     required_error: 'Survey start date',
   }),
@@ -46,29 +63,33 @@ const formSchema = z.object({
   }),
 });
 
-const today = new Date();
-const nextMonth = new Date(
-  today.getFullYear(),
-  today.getMonth() + 1,
-  today.getDate()
-);
+const EditSurvey = () => {
+  const navigate = useNavigate();
+  const submit = useSubmit();
+  const { survey, brands } = useLoaderData() as {
+    survey: Survey | null;
+    brands: Brand[];
+  };
 
-const NewSurvey = () => {
-  const brands = useLoaderData() as Brand[];
-  console.log('NewSurvey.brands', brands);
+  const today = new Date();
+  const nextMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    today.getDate()
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      description: '',
+      name: survey?.name || '',
+      description: survey?.description || '',
+      brand_id: survey?.brand.id.toString() || '',
       start_date: today,
       end_date: nextMonth,
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const params = {
       ...values,
       description: values.description || '',
@@ -76,11 +97,25 @@ const NewSurvey = () => {
       end_date: format(values.end_date, 'yyyy-MM-dd'),
       brand_id: parseInt(values.brand_id),
     };
-    await API.createSurvey(params);
+    let newSurvey: Survey;
+    if (!survey) {
+      newSurvey = (await API.createSurvey(params)) as Survey;
+    } else {
+      newSurvey = (await API.updateSurvey(survey.id, params)) as Survey;
+    }
+    submit(
+      { surveyId: `${newSurvey.id}` },
+      {
+        method: 'post',
+        action: `/surveys/${newSurvey.id}`,
+        encType: 'application/json',
+      }
+    );
   }
 
   return (
     <Form {...form}>
+      {/* eslint-disable @typescript-eslint/no-misused-promises */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
@@ -104,21 +139,19 @@ const NewSurvey = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Brand</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                // defaultValue={field.value}
-              >
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a brand" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {brands.map((brand) => (
-                    <SelectItem key={brand.id} value={brand.id.toString()}>
-                      {brand.name}
-                    </SelectItem>
-                  ))}
+                  {brands &&
+                    brands.map((brand) => (
+                      <SelectItem key={brand.id} value={brand.id.toString()}>
+                        {brand.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormDescription>
@@ -238,10 +271,15 @@ const NewSurvey = () => {
             );
           }}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="button" onClick={() => navigate(-1)}>
+          Cancel
+        </Button>
+        <Button type="submit" disabled={!form.formState.isValid}>
+          Submit
+        </Button>
       </form>
     </Form>
   );
 };
 
-export default NewSurvey;
+export default EditSurvey;
