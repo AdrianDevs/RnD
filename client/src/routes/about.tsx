@@ -17,6 +17,8 @@ function About() {
             <a
               className="flex flex-row gap-2"
               href="https://github.com/AdrianDevs/RnD"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Github color="black" />
               <span className="text-green_dark underline hover:text-purple_dark">
