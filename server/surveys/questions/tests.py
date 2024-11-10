@@ -222,7 +222,7 @@ class TestSurveysList(APITestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]['name'], 'Survey 1')
         self.assertEqual(result[0]['description'], 'Survey 1 Description')
-        self.assertEqual(result[0]['brand_name'], 'Brand 1')
+        self.assertEqual(result[0]['brand']['name'], 'Brand 1')
 
 
 class TestSurveyDetails(APITestCase):
@@ -247,7 +247,7 @@ class TestSurveyDetails(APITestCase):
         )
         self.assertEqual(result['name'], 'Survey 1')
         self.assertEqual(result['description'], 'Survey 1 Description')
-        self.assertEqual(result['brand_name'], 'Brand 1')
+        self.assertEqual(result['brand']['name'], 'Brand 1')
         self.assertEqual(len(result['questions_and_answer_choices']), 1)
 
     def test_create(self):
@@ -304,7 +304,7 @@ class TestSurveyDetails(APITestCase):
         )
         self.assertEqual(result['name'], 'Survey 1')
         self.assertEqual(result['description'], 'Survey 1 Description')
-        self.assertEqual(result['brand_name'], 'Brand 1')
+        self.assertEqual(result['brand']['name'], 'Brand 1')
         self.assertEqual(len(result['questions_and_answer_choices']), 2)
         self.assertEqual(result['questions_and_answer_choices'][0]['question']['text'], 'What is your favorite color?')
         self.assertEqual(result['questions_and_answer_choices'][1]['question']['text'], 'What is your two favorite colors?')
@@ -334,7 +334,7 @@ class TestSurveyDetails(APITestCase):
         updated_survey = response.json()
         self.assertEqual(updated_survey['name'], 'Survey 2')
         self.assertEqual(updated_survey['description'], 'Survey 2 Description')
-        self.assertEqual(updated_survey['brand_name'], 'Brand 1')
+        self.assertEqual(updated_survey['brand']['name'], 'Brand 1')
         self.assertEqual(len(updated_survey['questions_and_answer_choices']), 2)
         self.assertEqual(updated_survey['questions_and_answer_choices'][0]['question']['text'], 'What is your favorite color?')
         self.assertEqual(updated_survey['questions_and_answer_choices'][1]['question']['text'], 'What is your two favorite colors?')

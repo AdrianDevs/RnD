@@ -36,14 +36,15 @@ class AnswerChoiceSerializer(serializers.ModelSerializer):
 
 
 class SurveySerializerReader(serializers.ModelSerializer):
-    brand_name = serializers.SerializerMethodField()  # type: ignore
+    # brand = serializers.SerializerMethodField()  # type: ignore
+    brand = BrandSerializer(source='brand_id')
 
     class Meta:
         model = Survey
-        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'brand_name']
+        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'brand']
 
-    def get_brand_name(self, obj):
-        return obj.brand_id.name
+    # def get_brand(self, obj):
+    #     return obj.brand_id
 
 
 class SurveySerializerWriter(serializers.ModelSerializer):
