@@ -4,7 +4,7 @@ const Index = () => {
       <div className="mx-16">
         <div className="my-8 flex flex-col justify-start rounded-2xl bg-purple_medium p-16">
           <h1 className="text-center font-chapeau text-5xl font-light text-black">
-            Tracking Suits
+            Surveyor
           </h1>
         </div>
         <div className="my-8 flex flex-col justify-start rounded-2xl bg-green_medium p-16">

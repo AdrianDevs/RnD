@@ -34,7 +34,7 @@ const AppSidebarHeader = ({ onFilterChange }: Props) => {
             navigate('/')
           }}
         >
-          Tracking Suits
+          Surveyor
         </div>
         <div className="flex flex-row justify-between gap-2 pt-3">
           <div>
